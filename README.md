@@ -1,7 +1,7 @@
 # Open-Warehouse-Sim
 # WMS Manager - Warehouse Simulation
 
-A lightweight (127kb) logistics management game built with Vanilla JS/HTML5.
+A lightweight (142 kb) logistics management game built with Vanilla JS/HTML5.
 
 ##  About this Project
 This project is a personal challenge only to satisfy my curiosity in vibe-coding with AI agents. **I am a beginner and I don't know how to code.** The entire game was built through an iterative process using **Claude (Anthropic AI)**. 
