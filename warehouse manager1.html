@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMS Manager — Jeu de Gestion Logistique</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');:root{--bg:#0d1117;--sf:#161b22;--sf2:#1c2128;--sf3:#21262d;--bd:#30363d;--bd2:#3d444d;--tx:#eee;--tx2:#8b949e;--tx3:#6e7681;--bl:#388bfd;--bld:#1f3a5f;--gn:#3fb950;--gnd:#1a3a23;--ye:#d29922;--yed:#3a2f0a;--rd:#f85149;--rdd:#3a1a1a;--or:#e07b33;--ord:#3a2010;--pu:#a371f7;--cy:#39d8c8;--r:6px}*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:"Inter",sans-serif;font-size:13px}::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}#setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}.setup-box{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:40px;width:520px;max-width:96vw;max-height:90vh;overflow-y:auto}.setup-title{font-size:28px;font-weight:700;color:var(--bl);margin-bottom:6px;display:flex;align-items:center;gap:12px}.setup-sub{color:var(--tx2);font-size:14px;margin-bottom:28px}.setup-field{margin-bottom:18px}.setup-label{font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}.setup-input{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:10px 13px;color:var(--tx);font-family:"Inter",sans-serif;font-size:14px;outline:none;transition:border-color .2s}.setup-input:focus{border-color:var(--bl)}.setup-radio-group{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.setup-radio{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:10px;cursor:pointer;text-align:center;transition:all .15s}.setup-radio:hover,.setup-radio.sel{border-color:var(--bl);background:rgba(56,139,253,.1)}.setup-radio .sr-val{font-size:16px;font-weight:700;color:var(--bl);font-family:"monospace",monospace}.setup-radio .sr-lbl{font-size:10px;color:var(--tx3);margin-top:2px}.setup-start{width:100%;background:var(--bl);border:none;border-radius:var(--r);padding:13px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;transition:background .2s}.setup-start:hover{background:#4494ff}#main-app{display:none;grid-template-rows:48px 1fr 32px;height:100vh}#main-app.show{display:grid}#topbar{background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:10px;overflow:hidden}.logo{font-weight:700;font-size:14px;color:var(--bl);display:flex;align-items:center;gap:7px;flex-shrink:0}.logo-ico{background:var(--bl);width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px}.kpis{display:flex;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-left:6px}.kpi{padding:3px 11px;border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0}.kpi:last-child{border-right:none}.kpi-l{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px}.kpi-v{font-size:14px;font-weight:700;font-family:"monospace",monospace}.kpi-v.g{color:var(--gn)}.kpi-v.y{color:var(--ye)}.kpi-v.r{color:var(--rd)}.kpi-v.b{color:var(--bl)}.topbar-r{display:flex;align-items:center;gap:7px;margin-left:auto}.day-badge{background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--cy)}.clock{font-family:"monospace",monospace;font-size:13px;color:var(--tx2)}.btn{background:var(--sf2);border:1px solid var(--bd);color:var(--tx2);border-radius:var(--r);padding:4px 10px;font-size:11px;font-family:"Inter",sans-serif;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap}.btn:hover{border-color:var(--bd2);color:var(--tx)}.btn.primary{background:var(--bl);border-color:var(--bl);color:#fff}.btn.primary:hover{background:#4494ff}.btn.success{background:var(--gnd);border-color:var(--gn);color:var(--gn)}.btn.warn{border-color:var(--yed);color:var(--ye)}.live{display:flex;align-items:center;gap:5px;background:var(--gnd);border:1px solid var(--gn);border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600;color:var(--gn)}.ldot{width:5px;height:5px;border-radius:50%;background:var(--gn);animation:blink 1.2s infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}#tabbar{display:flex;background:var(--sf);border-bottom:1px solid var(--bd);padding:0 12px;overflow-x:auto}.tab{padding:8px 13px 7px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;display:flex;align-items:center;gap:5px;transition:color .1s;flex-shrink:0}.tab:hover{color:var(--tx)}.tab.active{color:var(--bl);border-bottom-color:var(--bl)}.tbadge{background:var(--sf3);border:1px solid var(--bd);border-radius:10px;padding:1px 5px;font-size:9px;color:var(--tx3)}.tab.active .tbadge{background:var(--bld);border-color:var(--bl);color:var(--bl)}#content-area{display:grid;grid-template-columns:1fr 360px;overflow:hidden}.tab-content{display:none;overflow-y:auto;overflow-x:hidden}.tab-content.active{display:block}#tc-workers{display:none;grid-template-rows:auto 1fr}#tc-workers.active{display:grid}.fbar{padding:6px 12px;border-bottom:1px solid var(--bd);display:flex;gap:5px;align-items:center;background:var(--sf);flex-wrap:wrap}.chip{background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--tx2);cursor:pointer;transition:all .1s;white-space:nowrap}.chip:hover{border-color:var(--bd2);color:var(--tx)}.chip.active{background:var(--bld);border-color:var(--bl);color:var(--bl)}.fsep{width:1px;height:14px;background:var(--bd);margin:0 2px}.wt{width:100%;border-collapse:collapse}.wt thead{position:sticky;top:0;z-index:5}.wt th{background:var(--sf2);border-bottom:1px solid var(--bd);padding:5px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;white-space:nowrap}.wt th:hover{color:var(--tx)}.wt td{padding:5px 10px;border-bottom:1px solid rgba(48,54,61,.4);font-size:11px;white-space:nowrap;vertical-align:middle}.wt tr{cursor:pointer}.wt tr:hover td{background:var(--sf2)}.wt tr.sel td{background:rgba(56,139,253,.08)}.wt tr.sel td:first-child{box-shadow:inset 2px 0 0 var(--bl)}.cid{font-family:"monospace",monospace;font-size:10px;color:var(--tx3)}.cname{font-weight:500}.sb{display:inline-flex;align-items:center;gap:3px;padding:2px 5px;border-radius:4px;font-size:10px;font-weight:600}.sb.picking{background:var(--bld);color:var(--bl)}.sb.idle{background:var(--yed);color:var(--ye)}.sb.break{background:var(--sf3);color:var(--tx3)}.sb.alert{background:var(--rdd);color:var(--rd);animation:blink .9s infinite}.sb.done{background:var(--gnd);color:var(--gn)}.sb.fired{background:#1a0808;color:#555;text-decoration:line-through}.sbd{width:4px;height:4px;border-radius:50%;background:currentColor}.pbar{display:flex;align-items:center;gap:5px;min-width:90px}.pb{flex:1;height:4px;background:var(--sf3);border-radius:2px;overflow:hidden}.pf{height:100%;border-radius:2px;transition:width .5s}.pv{font-family:"monospace",monospace;font-size:10px;min-width:26px;text-align:right}.prg{display:flex;align-items:center;gap:5px;min-width:110px}.pt{flex:1;height:4px;background:var(--sf3);border-radius:2px;overflow:hidden}.pft{height:100%;border-radius:2px;background:var(--bl);transition:width .5s}.ptxt{font-size:10px;font-family:"monospace",monospace;color:var(--tx2);min-width:34px;text-align:right}#rpanel{border-left:1px solid var(--bd);background:var(--sf);display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}#dh{padding:10px 12px;border-bottom:1px solid var(--bd)}.dempty{padding:28px 12px;text-align:center;color:var(--tx3)}.dname{font-size:15px;font-weight:700;color:var(--tx)}.did{font-family:"monospace",monospace;font-size:10px;color:var(--tx3);margin-top:2px}.dbadges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}#db{overflow-y:auto;padding:10px 12px}.infog{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}.ic{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:8px 10px}.ic-l{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}.ic-v{font-size:15px;font-weight:700;font-family:"monospace",monospace}.ic-s{font-size:10px;color:var(--tx3);margin-top:1px}.sech{font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px;margin:11px 0 6px;display:flex;align-items:center;gap:5px}.sech::after{content:"";flex:1;height:1px;background:var(--bd)}.ol{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto}.oi{background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:5px 7px;display:flex;align-items:center;gap:6px}.oi.cur{border-color:var(--bl);background:rgba(56,139,253,.05)}.oi.done{opacity:.4}.oseq{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;background:var(--sf3);color:var(--tx3);flex-shrink:0}.oi.cur .oseq{background:var(--bld);color:var(--bl)}.oi.done .oseq{background:var(--gnd);color:var(--gn)}.oii{flex:1;min-width:0}.oir{font-family:"monospace",monospace;font-size:10px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.oid{font-size:10px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#df{border-top:1px solid var(--bd);padding:8px 12px}.ar{display:flex;gap:4px;flex-wrap:wrap}.abtn{flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:5px;text-align:center;cursor:pointer;font-size:10px;color:var(--tx2);transition:all .15s;min-width:50px}.abtn:hover{border-color:var(--bd2);color:var(--tx)}.abtn.warn{border-color:var(--yed);color:var(--ye)}.abtn.danger{border-color:var(--rdd);color:var(--rd)}.abtn.success{border-color:var(--gnd);color:var(--gn)}.rank-tbl{width:100%;border-collapse:collapse}.rank-tbl th{background:var(--sf2);border-bottom:1px solid var(--bd);padding:5px 10px;font-size:11px;font-weight:600;color:var(--tx2)}.rank-tbl td{padding:5px 10px;border-bottom:1px solid rgba(48,54,61,.4);font-size:11px}.stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:12px}.sc-l{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}.sc-v{font-size:24px;font-weight:700;font-family:"monospace",monospace}.sc-s{font-size:10px;color:var(--tx3);margin-top:2px}.hbars{display:flex;flex-direction:column;gap:4px}.hbrow{display:flex;align-items:center;gap:7px;font-size:11px}.hblabel{min-width:90px;color:var(--tx2);text-align:right;font-size:10px}.hbtrack{flex:1;height:14px;background:var(--sf3);border-radius:2px;overflow:hidden}.hbfill{height:100%;display:flex;align-items:center;padding-left:5px;font-size:9px;font-family:"monospace",monospace;color:rgba(255,255,255,.9)}.hbval{min-width:50px;font-family:"monospace",monospace;font-size:10px;color:var(--tx2)}.hr-item{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:9px 11px;display:flex;align-items:flex-start;gap:9px;margin-bottom:5px}.hr-item.fired{opacity:.55;border-color:var(--rdd)}.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}.hr-info{flex:1;min-width:0}.hr-name{font-weight:600;font-size:12px}.hr-meta{font-size:10px;color:var(--tx3);margin-top:1px}.hr-badges{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}.hbg{font-size:9px;border:1px solid;border-radius:3px;padding:1px 5px}.hbg.warn{border-color:var(--ye);color:var(--ye);background:var(--yed)}.hbg.fire{border-color:var(--rd);color:var(--rd);background:var(--rdd)}.hbg.good{border-color:var(--gn);color:var(--gn);background:var(--gnd)}.hbg.req{border-color:var(--pu);color:var(--pu);background:rgba(163,113,247,.1)}.hacts{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.hbtn{background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:3px 8px;font-size:10px;cursor:pointer;color:var(--tx2);transition:all .15s}.hbtn:hover{border-color:var(--bd2);color:var(--tx)}.hbtn.w{border-color:var(--yed);color:var(--ye)}.hbtn.f{border-color:var(--rdd);color:var(--rd)}.hbtn.g{border-color:var(--gnd);color:var(--gn)}.stock-tbl{width:100%;border-collapse:collapse}.stock-tbl th{background:var(--sf2);border-bottom:1px solid var(--bd);padding:5px 10px;font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;white-space:nowrap}.stock-tbl td{padding:4px 10px;border-bottom:1px solid rgba(48,54,61,.35);font-size:11px;white-space:nowrap}.stock-tbl tr:hover td{background:var(--sf2)}.sl{display:flex;align-items:center;gap:5px;min-width:110px}.slb{flex:1;height:5px;background:var(--sf3);border-radius:2px;overflow:hidden}.slf{height:100%;border-radius:2px;transition:width .7s}.rbadge{font-size:9px;padding:2px 5px;border-radius:3px;border:1px solid}.rbadge.crit{background:var(--rdd);color:var(--rd);border-color:var(--rd)}.rbadge.low{background:var(--yed);color:var(--ye);border-color:var(--ye)}.rbadge.ok{background:var(--gnd);color:var(--gn);border-color:var(--gn)}.obtn{background:var(--bld);border:1px solid var(--bl);border-radius:3px;padding:2px 7px;font-size:10px;cursor:pointer;color:var(--bl);transition:all .15s}.obtn:hover{background:var(--bl);color:#fff}.obtn.pend{background:var(--yed);border-color:var(--ye);color:var(--ye)}.market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;padding:12px}.mprod{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px}.mprod:hover{border-color:var(--bd2)}.mp-ref{font-family:"monospace",monospace;font-size:9px;color:var(--tx3)}.mp-name{font-weight:500;font-size:12px;color:var(--tx);margin:2px 0}.mp-cat{font-size:10px;color:var(--tx3)}.mp-price{font-family:"monospace",monospace;font-size:15px;font-weight:700;margin:6px 0 2px}.mp-change{font-size:10px}.mp-change.up{color:var(--rd)}.mp-change.dn{color:var(--gn)}.mp-order-row{display:flex;gap:5px;align-items:center;margin-top:7px}.qty-input{background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:4px 7px;color:var(--tx);font-family:"monospace",monospace;font-size:12px;width:65px;outline:none}.qty-input:focus{border-color:var(--bl)}.dock-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}.dock{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:12px}.dock.occupied{border-color:var(--gn);background:rgba(63,185,80,.05)}.dock.ready{border-color:var(--bl);background:rgba(56,139,253,.05);animation:pulse-bl 2s infinite}@keyframes pulse-bl{0%,100%{box-shadow:0 0 0 0 rgba(56,139,253,.0)}50%{box-shadow:0 0 0 3px rgba(56,139,253,.15)}}.dock-id{font-family:"monospace",monospace;font-size:11px;font-weight:700;color:var(--tx3)}.dock-truck{font-size:12px;font-weight:600;color:var(--tx);margin:4px 0}.dock-carrier{font-size:10px;color:var(--tx2)}.dock-pals{font-size:10px;color:var(--tx3);margin-top:4px}.dock-assign{margin-top:8px}.dock-pal-item{background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:4px 7px;margin-bottom:3px;cursor:pointer;font-size:10px;display:flex;align-items:center;gap:6px;transition:all .15s}.dock-pal-item:hover{border-color:var(--bl)}.dock-pal-item .pi-ref{font-family:"monospace",monospace;color:var(--bl)}.dock-pal-item .pi-type{color:var(--tx3)}.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}.fin-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px}.fin-title{font-size:10px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}.fin-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(48,54,61,.4);font-size:12px}.fin-row:last-child{border-bottom:none}.fin-row .fv{font-family:"monospace",monospace;font-weight:600}.fin-row .fv.pos{color:var(--gn)}.fin-row .fv.neg{color:var(--rd)}.fin-total{display:flex;justify-content:space-between;padding:8px 0 0;margin-top:6px;border-top:2px solid var(--bd);font-weight:700;font-size:13px}.notif-list{display:flex;flex-direction:column;gap:5px;padding:12px}.notif-item{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:9px 11px;display:flex;gap:9px}.notif-item.req{border-color:rgba(163,113,247,.4)}.notif-item.crit{border-color:rgba(248,81,73,.4)}.notif-item.info{border-color:rgba(56,139,253,.3)}.notif-ico{font-size:16px;flex-shrink:0}.notif-body{flex:1}.notif-title{font-weight:600;font-size:12px;color:var(--tx)}.notif-msg{font-size:11px;color:var(--tx2);margin-top:2px}.notif-time{font-size:9px;color:var(--tx3);margin-top:3px;font-family:"monospace",monospace}.notif-acts{display:flex;gap:5px;margin-top:6px}.na{background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:3px 8px;font-size:10px;cursor:pointer;color:var(--tx2);transition:all .15s}.na:hover{border-color:var(--bd2);color:var(--tx)}.na.ok{border-color:var(--gnd);color:var(--gn)}.na.no{border-color:var(--rdd);color:var(--rd)}#interview-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}#interview-modal.show{display:flex}.imodal-box{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:24px;width:560px;max-width:95vw;max-height:85vh;overflow-y:auto}.imodal-title{font-size:18px;font-weight:700;margin-bottom:4px}.cand-info{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:12px;margin-bottom:14px}.cand-stat{display:flex;align-items:center;gap:8px;margin-bottom:6px}.cand-stat-l{font-size:10px;color:var(--tx3);width:110px;flex-shrink:0}.cand-stat-bar{flex:1;height:8px;background:var(--sf3);border-radius:4px;overflow:hidden}.cand-stat-fill{height:100%;border-radius:4px}.cand-stat-v{font-family:"monospace",monospace;font-size:11px;color:var(--tx2);min-width:30px;text-align:right}.q-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}.q-item{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px}.q-text{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:6px}.q-answer{font-size:12px;color:var(--tx2);font-style:italic;line-height:1.5}.salary-neg{margin-top:10px}.sal-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sal-label{font-size:11px;color:var(--tx2);min-width:100px}.sal-input{background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:6px 10px;color:var(--tx);font-family:"monospace",monospace;font-size:13px;width:120px;outline:none}.sal-input:focus{border-color:var(--bl)}.sal-demand{font-size:11px;color:var(--tx3)}.modal-actions{display:flex;gap:8px;margin-top:14px}#pal-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}#pal-modal.show{display:flex}.pmodal-box{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:20px;width:500px;max-width:95vw;max-height:80vh;overflow-y:auto}.pal-list{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto}.pal-item{background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:8px 10px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}.pal-item:hover{border-color:var(--bl)}.pi-ref{font-family:"monospace",monospace;font-size:12px;font-weight:700;color:var(--bl)}.pi-meta{font-size:10px;color:var(--tx2)}#ticker-band{background:var(--sf);border-top:1px solid var(--bd);overflow:hidden;display:flex;align-items:center;height:32px}#ticker-inner{display:inline-flex;gap:40px;white-space:nowrap;animation:ticker 40s linear infinite;font-size:11px;color:var(--tx2);padding-left:100%}@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}.tick-item{display:inline-flex;align-items:center;gap:6px}.tick-item .ti-ico{font-size:13px}.tick-item.warn .ti-txt{color:var(--ye)}.tick-item.crit .ti-txt{color:var(--rd)}.tick-item.info .ti-txt{color:var(--bl)}.tick-item.good .ti-txt{color:var(--gn)}#mission-badge{position:fixed;top:60px;right:16px;background:rgba(26,58,95,.92);border:1px solid var(--bl);border-radius:var(--r);padding:10px 14px;width:250px;backdrop-filter:blur(8px);z-index:200}.mb-title{font-size:10px;font-weight:600;color:var(--bl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}.mb-obj{font-size:11px;color:var(--tx2);margin-bottom:3px;display:flex;justify-content:space-between}.mb-obj .mv{color:var(--tx);font-family:"monospace",monospace}.mb-prog{height:3px;background:var(--sf3);border-radius:2px;overflow:hidden;margin-bottom:6px}.mb-pfill{height:100%;background:var(--bl);border-radius:2px;transition:width 1s}body.night-mode #topbar,body.night-mode #tabbar,body.night-mode .fbar{background:#0a0c0f}body.night-mode #rpanel{background:#0a0c0f}body.night-mode #content-area{background:#080a0c}</style>
+
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div id="setup-screen">
+<div class="setup-box">
+  <div class="setup-title">📦 WMS Manager</div>
+  <div class="setup-sub">Jeu de gestion logistique — Gérez votre entrepôt de A à Z</div>
+  <div class="setup-field">
+    <label class="setup-label">Votre nom de gestionnaire</label>
+    <input class="setup-input" id="mgr-name" placeholder="Ex: Sophie Martin" value="">
+  </div>
+  <div class="setup-field">
+    <label class="setup-label">Nom de l'entrepôt</label>
+    <input class="setup-input" id="wh-name" placeholder="Ex: Entrepôt Nord-Est" value="LogiCenter Pro">
+  </div>
+  <div class="setup-field">
+    <label class="setup-label">Budget de départ</label>
+    <div class="setup-radio-group" id="budget-options">
+      <div class="setup-radio" onclick="selectBudget(100000,this)"><div class="sr-val">100K€</div><div class="sr-lbl">Débutant</div></div>
+      <div class="setup-radio sel" onclick="selectBudget(500000,this)"><div class="sr-val">500K€</div><div class="sr-lbl">Standard</div></div>
+      <div class="setup-radio" onclick="selectBudget(2000000,this)"><div class="sr-val">2M€</div><div class="sr-lbl">Expert</div></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+      <span style="font-size:11px;color:var(--tx3)">Budget personnalisé:</span>
+      <input class="setup-input" id="custom-budget" placeholder="Ex: 750000" style="width:150px;padding:6px 10px;">
+      <span style="font-size:11px;color:var(--tx3)">€</span>
+    </div>
+  </div>
+  <div class="setup-field">
+    <label class="setup-label">Nombre de préparateurs initiaux</label>
+    <div class="setup-radio-group">
+      <div class="setup-radio" onclick="selectWorkers(50,this)"><div class="sr-val">50</div><div class="sr-lbl">Petit</div></div>
+      <div class="setup-radio sel" onclick="selectWorkers(150,this)"><div class="sr-val">150</div><div class="sr-lbl">Moyen</div></div>
+      <div class="setup-radio" onclick="selectWorkers(300,this)"><div class="sr-val">300</div><div class="sr-lbl">Grand</div></div>
+    </div>
+  </div>
+  <div class="setup-field">
+    <label class="setup-label">Difficulté</label>
+    <div class="setup-radio-group">
+      <div class="setup-radio sel" onclick="selectDiff('easy',this)"><div class="sr-val">😊</div><div class="sr-lbl">Facile</div></div>
+      <div class="setup-radio" onclick="selectDiff('normal',this)"><div class="sr-val">😐</div><div class="sr-lbl">Normal</div></div>
+      <div class="setup-radio" onclick="selectDiff('hard',this)"><div class="sr-val">😤</div><div class="sr-lbl">Difficile</div></div>
+    </div>
+  </div>
+  <button class="setup-start" onclick="startGame()">▶ Lancer la simulation</button>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-app">
+  <div id="topbar">
+    <div class="logo"><div class="logo-ico">📦</div><div><div id="wh-title">WMS</div><div style="font-size:9px;font-weight:400;color:var(--tx2)" id="wh-sub">—</div></div></div>
+    <div class="kpis">
+      <div class="kpi"><span class="kpi-l">Budget</span><span class="kpi-v g" id="k-budget">—</span></div>
+      <div class="kpi"><span class="kpi-l">Rev. jour</span><span class="kpi-v b" id="k-revenue">—</span></div>
+      <div class="kpi"><span class="kpi-l">Charges/h</span><span class="kpi-v r" id="k-costs">—</span></div>
+      <div class="kpi"><span class="kpi-l">Actifs</span><span class="kpi-v" id="k-active">—</span></div>
+      <div class="kpi"><span class="kpi-l">Palettes/j</span><span class="kpi-v b" id="k-pal">—</span></div>
+      <div class="kpi"><span class="kpi-l">Alertes</span><span class="kpi-v r" id="k-alerts">—</span></div>
+      <div class="kpi"><span class="kpi-l">Notifs</span><span class="kpi-v y" id="k-notifs">—</span></div>
+    </div>
+    <div class="topbar-r">
+      <div class="day-badge" id="day-badge">J1 — Matin</div>
+      <div class="clock" id="clock">06:00</div>
+      <button class="btn success" onclick="saveGame()">💾 Sauver</button>
+      <button class="btn" onclick="exportSave()">📥 Export</button>
+      <button class="btn" onclick="document.getElementById('import-file').click()">📤 Import</button>
+      <input type="file" id="import-file" style="display:none" accept=".json" onchange="importSave(event)">
+      <button class="btn warn" onclick="coupDeBourre()" id="coup-btn" style="font-weight:700;">⚡ COUP DE BOURRE</button>
+      <div class="live"><div class="ldot"></div>LIVE</div>
+    </div>
+  </div>
+
+  <div id="content-area">
+    <div style="display:grid;grid-template-rows:auto 1fr;overflow:hidden;">
+      <div id="tabbar">
+        <div class="tab active" onclick="setTab('workers')" id="t-workers">👷 Préparateurs <span class="tbadge" id="tb-workers">—</span></div>
+        <div class="tab" onclick="setTab('docks')" id="t-docks">🚚 Quais <span class="tbadge" id="tb-docks">—</span></div>
+        <div class="tab" onclick="setTab('stock')" id="t-stock">📦 Stocks <span class="tbadge" id="tb-stock">—</span></div>
+        <div class="tab" onclick="setTab('market')" id="t-market">🛒 Marché</div>
+        <div class="tab" onclick="setTab('ranking')" id="t-ranking">🏆 Ranking</div>
+        <div class="tab" onclick="setTab('stats')" id="t-stats">📊 Stats</div>
+        <div class="tab" onclick="setTab('hr')" id="t-hr">👔 RH <span class="tbadge" id="tb-hr">—</span></div>
+        <div class="tab" onclick="setTab('finance')" id="t-finance">💶 Finances</div>
+        <div class="tab" onclick="setTab('notifs')" id="t-notifs">🔔 Demandes <span class="tbadge" id="tb-notifs">—</span></div>
+        <div class="tab" onclick="setTab('warehouse')" id="t-warehouse">🏭 Entrepôt</div>
+        <div class="tab" onclick="setTab('map')" id="t-map">🗺 Plan</div>
+      </div>
+      <div style="overflow:hidden;display:grid;">
+        <!-- WORKERS -->
+        <div id="tc-workers" class="active" style="display:grid;grid-template-rows:auto 1fr;overflow:hidden;">
+          <div class="fbar" id="workers-fbar">
+            <span style="font-size:10px;color:var(--tx3)">Zone:</span>
+            <div class="chip active" onclick="fZ('all',this)">All</div>
+            <div class="chip" onclick="fZ('A',this)">A</div><div class="chip" onclick="fZ('B',this)">B</div>
+            <div class="chip" onclick="fZ('C',this)">C</div><div class="chip" onclick="fZ('D',this)">D</div>
+            <div class="chip" onclick="fZ('E',this)">E</div>
+            <div class="fsep"></div>
+            <div class="chip active" onclick="fSt('all',this)">Tous</div>
+            <div class="chip" onclick="fSt('picking',this)">Picking</div>
+            <div class="chip" onclick="fSt('alert',this)">Alertes</div>
+            <div class="chip" onclick="fSt('idle',this)">Inactif</div>
+            <div class="chip" onclick="fSt('break',this)">Pause</div>
+            <div class="fsep"></div>
+            <input id="wsearch" placeholder="🔍 Nom/ID/Allée..." style="background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:3px 8px;color:var(--tx);font-family:'Inter',sans-serif;font-size:11px;outline:none;width:160px;" oninput="wSearch(this.value)">
+            <div style="margin-left:auto;font-size:10px;color:var(--tx3)" id="wcount">—</div>
+          </div>
+          <div style="overflow-y:auto;">
+            <table class="wt" id="wtable">
+              <thead><tr>
+                <th onclick="srt('id')">ID</th><th onclick="srt('name')">Préparateur</th>
+                <th>Trait</th><th>Localisation</th><th onclick="srt('status')">Statut</th>
+                <th onclick="srt('rate')">Col/h</th><th onclick="srt('errors')">Err.</th>
+                <th onclick="srt('salary')">Salaire/h</th><th onclick="srt('progress')">Palette</th>
+                <th>🎙</th>
+              </tr></thead>
+              <tbody id="wtbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- DOCKS -->
+        <div id="tc-docks" class="tab-content" style="overflow-y:auto;padding:12px;">
+          <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;">
+            <div style="font-size:13px;font-weight:600;color:var(--tx)">Gestion des quais de chargement</div>
+            <div style="font-size:11px;color:var(--tx3);margin-left:4px">— Assignez les palettes finalisées aux camions</div>
+            <div style="margin-left:auto;font-size:11px;color:var(--tx3)">Revenu par palette assignée: <span style="color:var(--gn);font-family:'JetBrains Mono',monospace" id="rev-per-pal">—</span></div>
+          </div>
+          <div style="margin-bottom:10px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;display:flex;gap:16px;flex-wrap:wrap;">
+            <div><span style="font-size:10px;color:var(--tx3)">Palettes en attente d'assignation:</span> <span style="font-family:'JetBrains Mono',monospace;color:var(--ye);font-weight:700" id="pals-waiting">0</span></div>
+            <div><span style="font-size:10px;color:var(--tx3)">Chargées aujourd'hui:</span> <span style="font-family:'JetBrains Mono',monospace;color:var(--gn);font-weight:700" id="pals-shipped">0</span></div>
+            <div><span style="font-size:10px;color:var(--tx3)">Revenu aujourd'hui:</span> <span style="font-family:'JetBrains Mono',monospace;color:var(--bl);font-weight:700" id="today-revenue">0€</span></div>
+          </div>
+          <!-- Palettes waiting -->
+          <div style="margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
+              Palettes finalisées — à assigner
+              <span style="flex:1;height:1px;background:var(--bd)"></span>
+              <select id="bulk-dock-select" style="background:var(--sf2);border:1px solid var(--bd);border-radius:4px;color:var(--tx2);font-size:11px;padding:2px 6px;outline:none;" onchange="updateBulkSelect()">
+                <option value="">Assignation groupée → Quai...</option>
+              </select>
+              <button class="btn primary" style="font-size:11px;padding:3px 10px;" onclick="bulkAssign()">⚡ Tout assigner</button>
+            </div>
+            <div id="palettes-waiting-list" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+          </div>
+          <div id="dock-grid" class="dock-grid"></div>
+        </div>
+        <!-- STOCK -->
+        <div id="tc-stock" class="tab-content" style="overflow:hidden;grid-template-rows:auto 1fr;">
+          <div class="fbar">
+            <div class="chip active" onclick="fStock('all',this)">Tous</div>
+            <div class="chip" onclick="fStock('crit',this)">🔴 Critique</div>
+            <div class="chip" onclick="fStock('low',this)">🟡 Bas</div>
+            <div class="chip" onclick="fStock('ok',this)">🟢 OK</div>
+            <div class="fsep"></div>
+            <input id="stocksearch" placeholder="🔍 Ref/Nom..." style="background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:3px 8px;color:var(--tx);font-family:'Inter',sans-serif;font-size:11px;outline:none;width:180px;" oninput="renderStock()">
+            <div class="fsep"></div>
+            <button class="btn primary" onclick="orderAllCrit()">🛒 Réassortir tout critique</button>
+            <div class="fsep"></div>
+            <button class="btn" onclick="srtStockByLevel(1)" title="Trier: critique en premier">🔴↑ Critique d'abord</button>
+            <button class="btn" onclick="srtS('stock')" title="Trier par niveau de stock">📊 Par stock</button>
+            <div style="margin-left:auto;font-size:10px;color:var(--tx3)" id="stockcnt">—</div>
+          </div>
+          <div style="overflow-y:auto;">
+            <table class="stock-tbl" id="stbl">
+              <thead><tr>
+                <th onclick="srtS('ref')">Ref</th><th onclick="srtS('name')">Produit</th>
+                <th onclick="srtS('cat')">Cat.</th><th onclick="srtS('stock')">Stock</th>
+                <th>Seuil</th><th>Statut</th><th>Cmde</th><th>Action</th>
+              </tr></thead>
+              <tbody id="stbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- MARKET -->
+        <div id="tc-market" class="tab-content">
+          <div class="fbar">
+            <input id="marketsearch" placeholder="🔍 Ref/Nom..." style="background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:3px 8px;color:var(--tx);font-family:'Inter',sans-serif;font-size:11px;outline:none;width:180px;" oninput="renderMarket()">
+            <div class="fsep"></div>
+            <div class="chip active" onclick="fMarket('all',this)">Toutes</div>
+            <div class="chip" onclick="fMarket('Alimentaire',this)">🍎 Alim.</div>
+            <div class="chip" onclick="fMarket('Boissons',this)">🍺 Bois.</div>
+            <div class="chip" onclick="fMarket('Hygiène',this)">🧴 Hyg.</div>
+            <div class="chip" onclick="fMarket('Électronique',this)">💡 Elec.</div>
+            <div class="chip" onclick="fMarket('Textile',this)">👕 Tex.</div>
+            <div class="chip" onclick="fMarket('Bricolage',this)">🔨 Bri.</div>
+            <div class="chip" onclick="fMarket('Maison',this)">🏠 Mais.</div>
+            <div class="chip" onclick="fMarket('Jardin',this)">🌿 Jard.</div>
+            <div class="chip" onclick="fMarket('Sport',this)">⚽ Sport</div>
+            <div class="chip" onclick="fMarket('Pharmacie',this)">💊 Phar.</div>
+          </div>
+          <div id="market-grid" class="market-grid"></div>
+        </div>
+        <!-- RANKING -->
+        <div id="tc-ranking" class="tab-content" style="overflow-y:auto;">
+          <div class="fbar">
+            <button class="btn" onclick="setRankM('rate')" id="rm-rate">📈 Prod.</button>
+            <button class="btn" onclick="setRankM('errors')" id="rm-errors">⚠ Erreurs</button>
+            <button class="btn" onclick="setRankM('palettes')" id="rm-pal">📦 Palettes</button>
+            <button class="btn" onclick="setRankM('salary')" id="rm-sal">💶 Salaire</button>
+          </div>
+          <table class="rank-tbl"><thead><tr><th>Rang</th><th>Préparateur</th><th>Valeur</th><th>Graph</th><th>Équipe</th><th>Statut</th></tr></thead>
+          <tbody id="rank-tbody"></tbody></table>
+        </div>
+        <!-- STATS -->
+        <div id="tc-stats" class="tab-content" style="overflow-y:auto;padding:12px;">
+          <div id="stats-inner"></div>
+        </div>
+        <!-- HR -->
+        <div id="tc-hr" class="tab-content" style="overflow-y:auto;padding:12px;">
+          <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center;">
+            <button class="btn primary" onclick="openHireModal()">➕ Embaucher</button>
+            <div class="fsep"></div>
+            <div class="chip active" onclick="fHR('all',this)" id="hrf-all">Tous</div>
+            <div class="chip" onclick="fHR('warn',this)" id="hrf-warn">⚠ Avertis</div>
+            <div class="chip" onclick="fHR('fired',this)" id="hrf-fired">🚫 Licenciés</div>
+            <div class="chip" onclick="fHR('good',this)" id="hrf-good">✅ Bons</div>
+            <div class="chip" onclick="fHR('congé',this)" id="hrf-cg">🏖 Congé</div>
+            <input id="hr-search" placeholder="🔍 Nom/ID..." style="background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:3px 8px;color:var(--tx);font-family:'Inter',sans-serif;font-size:11px;outline:none;width:160px;" oninput="renderHR()">
+          </div>
+          <div id="hr-list"></div>
+        </div>
+        <!-- FINANCE -->
+        <div id="tc-finance" class="tab-content" style="overflow-y:auto;padding:12px;">
+          <div id="finance-inner"></div>
+        </div>
+        <!-- NOTIFS -->
+        <div id="tc-map" class="tab-content" style="overflow-y:auto;padding:12px;">
+          <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+            <div style="font-size:13px;font-weight:600">Plan en temps réel — Entrepôt</div>
+            <div class="legend" style="display:flex;gap:10px;flex-wrap:wrap;font-size:10px;margin-left:8px;">
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--rd);border-radius:2px;display:inline-block"></span>Alerte</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--gn);border-radius:2px;display:inline-block"></span>Haute prod. ≥90</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--bl);border-radius:2px;display:inline-block"></span>Picking</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--ye);border-radius:2px;display:inline-block"></span>Sous objectif</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--sf3);border-radius:2px;display:inline-block"></span>Vide</span>
+            </div>
+          </div>
+          <div id="map-content-main"></div>
+        </div>
+        <div id="tc-notifs" class="tab-content" style="overflow-y:auto;">
+          <div class="fbar">
+            <div class="chip active" onclick="fNotif('all',this)">Toutes</div>
+            <div class="chip" onclick="fNotif('req',this)">📋 Demandes</div>
+            <div class="chip" onclick="fNotif('crit',this)">🚨 Critiques</div>
+            <div class="chip" onclick="fNotif('info',this)">ℹ Info</div>
+          </div>
+          <div class="notif-list" id="notif-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="rpanel">
+      <div id="dh">
+        <div class="dempty" id="dempty"><div style="font-size:26px;margin-bottom:6px">👤</div><div style="color:var(--tx2);font-size:12px">Sélectionnez un préparateur</div></div>
+        <div id="dcontent" style="display:none">
+          <div class="dname" id="d-name">—</div>
+          <div class="did" id="d-id">—</div>
+          <div class="dbadges" id="d-badges"></div>
+        </div>
+      </div>
+      <div id="db">
+        <div id="d-cards" style="display:none">
+          <div class="infog">
+            <div class="ic"><div class="ic-l">Productivité</div><div class="ic-v" id="dv-rate" style="color:var(--bl)">—</div><div class="ic-s">col/heure</div></div>
+            <div class="ic"><div class="ic-l">Salaire brut</div><div class="ic-v" id="dv-sal" style="color:var(--ye)">—</div><div class="ic-s">€/heure</div></div>
+            <div class="ic"><div class="ic-l">Palette</div><div class="ic-v" id="dv-pal" style="color:var(--pu);font-size:12px">—</div><div class="ic-s" id="dv-paltype">—</div></div>
+            <div class="ic"><div class="ic-l">Avancement</div><div class="ic-v" id="dv-prog" style="color:var(--gn)">—</div><div class="ic-s" id="dv-prog-s">articles</div></div>
+          </div>
+          <div class="sech">📍 Position</div>
+          <div style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:9px;margin-bottom:4px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+              <div><div style="font-size:9px;color:var(--tx3);margin-bottom:2px">ALLÉE</div><div style="font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;color:#a371f7" id="dv-al">—</div></div>
+              <div><div style="font-size:9px;color:var(--tx3);margin-bottom:2px">ÉTAGÈRE</div><div style="font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--cy)" id="dv-et">—</div></div>
+              <div><div style="font-size:9px;color:var(--tx3);margin-bottom:2px">RACK</div><div style="font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--or)" id="dv-rk">—</div></div>
+            </div>
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--bd);font-size:10px;color:var(--tx3)">Zone <span id="dv-zone" style="color:var(--tx)">—</span> · MAJ <span id="dv-upd" style="font-family:'JetBrains Mono',monospace;color:var(--tx)">—</span></div>
+          </div>
+          <div style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 9px;display:flex;gap:8px;align-items:center;margin-bottom:4px;">
+            <div class="vwave" id="dv-vwave" style="display:none;flex-shrink:0">
+              <div style="width:2px;background:var(--gn);border-radius:1px;animation:vw .28s linear infinite alternate;height:4px"></div>
+              <div style="width:2px;background:var(--gn);border-radius:1px;animation:vw .45s linear infinite alternate;height:8px"></div>
+              <div style="width:2px;background:var(--gn);border-radius:1px;animation:vw .38s linear infinite alternate;height:6px"></div>
+              <div style="width:2px;background:var(--gn);border-radius:1px;animation:vw .55s linear infinite alternate;height:10px"></div>
+            </div>
+            <div id="dv-vmsg" style="font-size:11px;color:var(--tx2);font-style:italic">—</div>
+          </div>
+          <div class="sech">📋 Prélèvement</div>
+          <div class="ol" id="dv-ol"></div>
+          <div class="sech">📊 Stats</div>
+          <div class="infog" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="ic"><div class="ic-l">Depuis</div><div class="ic-v" style="font-size:12px;color:var(--tx)" id="dv-since">—</div><div class="ic-s">shift</div></div>
+            <div class="ic"><div class="ic-l">Erreurs</div><div class="ic-v" style="font-size:12px" id="dv-err">—</div><div class="ic-s">scans ko</div></div>
+            <div class="ic"><div class="ic-l">Palettes</div><div class="ic-v" style="font-size:12px;color:var(--gn)" id="dv-done">—</div><div class="ic-s">finalisées</div></div>
+          </div>
+        </div>
+      </div>
+      <div id="df">
+        <div class="ar" id="d-actions" style="display:none">
+          <div class="abtn" onclick="doContact()">📞</div>
+          <div class="abtn success" onclick="doAssignPal()">📦 Palette</div>
+          <div class="abtn" onclick="doReassign()">🔀</div>
+          <div class="abtn warn" onclick="doWarn()">⚠</div>
+          <div class="abtn danger" onclick="doFire()">🚫</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKER BAND -->
+  
+</div>
+
+
+<!-- WAREHOUSE VIEW TAB -->
+<div id="tc-warehouse" class="tab-content" style="padding:20px;overflow:auto;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="font-size:18px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+      <span>🏭</span>
+      <span id="wh-view-title">Plan de l'Entrepôt</span>
+      <div style="margin-left:auto;font-size:11px;color:var(--tx2);">
+        <span id="wh-active-count">—</span> préparateurs actifs
+      </div>
+    </div>
+    
+    <!-- Legend -->
+    <div style="display:flex;gap:20px;margin-bottom:20px;font-size:11px;padding:12px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:16px;height:16px;background:var(--gn);border-radius:3px;"></div>
+        <span>Haute productivité (120+)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:16px;height:16px;background:var(--bl);border-radius:3px;"></div>
+        <span>Bonne productivité (90-120)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:16px;height:16px;background:var(--ye);border-radius:3px;"></div>
+        <span>Productivité normale (60-90)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:16px;height:16px;background:var(--rd);border-radius:3px;"></div>
+        <span>Productivité faible (<60)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:16px;height:16px;background:var(--sf3);border-radius:3px;"></div>
+        <span>Vide</span>
+      </div>
+    </div>
+    
+    <!-- Warehouse grid -->
+    <div id="warehouse-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:15px;"></div>
+  </div>
+</div>
+
+<div id="ticker-band">
+    <div id="ticker-inner">
+      <span class="tick-item info"><span class="ti-ico">ℹ</span><span class="ti-txt">WMS Manager — Bienvenue dans votre entrepôt</span></span>
+      <span class="tick-item good"><span class="ti-ico">✅</span><span class="ti-txt">Système opérationnel</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="pal-modal">
+<div class="pmodal-box">
+  <div style="font-size:16px;font-weight:700;margin-bottom:4px;display:flex;justify-content:space-between;">Assigner une palette <span style="cursor:pointer;color:var(--tx3)" onclick="closePalModal()">✕</span></div>
+  <div style="font-size:11px;color:var(--tx2);margin-bottom:12px">→ <strong id="pm-worker">—</strong></div>
+  <div class="pal-list" id="pm-list"></div>
+</div>
+</div>
+
+<div id="interview-modal">
+<div class="imodal-box">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <div class="imodal-title" id="im-title">Entretien d'embauche</div>
+    <span style="cursor:pointer;color:var(--tx3);font-size:18px" onclick="closeInterview()">✕</span>
+  </div>
+  <div id="im-content"></div>
+</div>
+</div>
+
+<style>
+.vwave{display:flex;align-items:center;gap:2px;height:14px;}
+.vwb{width:2px;border-radius:1px;animation:vw linear infinite alternate;}
+@keyframes vw{0%{height:3px}100%{height:12px}}
+</style>
+
+<script>
+console.log("=== WMS3 Script Loading ===");
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Global error:', msg, 'at', lineNo + ':' + columnNo);
+    alert('JavaScript Error: ' + msg + ' at line ' + lineNo);
+    return false;
+};
+console.log("Error handler installed");
+
+
+
+const SYLLABLES_FIRST = ['Lu','Em','Th','Lé','No','Ja','Lo','Ma','Hu','Ca','Et','In','Li','Zo','Ga','Ch','Ar','Sa','Na','Ra','La','To','Ma','Qu','Dy','Fl','Bap','Si','Al','Ju','Pi','Ba','An','Da','Ke','Mi','Ni','Ol','Pa','Ro','Sé','Fé','Clé','Bru','Cyr','Del','Éd','Flo','Gil','Hé','Ivo','Jér','Kév','Luc','Mél','Nor','Oph','Pas','Quen','Reg','Syl','Thi','Uri','Val','Wil','Xav','Yve','Zac'];
+const SYLLABLES_END_M = ['cas','as','éo','ah','ah','de','is','an','go','le','an','ès','am','é','iel','e','ur','an','el','aël','om','im','én','an','in','an','ien','on','ex','en','en','ian','tiste','ou','ric','ge','vin','ier','ix','ère','rge','ard','rel'];
+const SYLLABLES_END_F = ['ma','me','éa','a','ée','de','is','on','go','lle','ine','ès','ie','ée','iel','ise','aure','ine','elle','aëlle','ie','ée','ie','ine','ine','ance','ienne','e','ée','ée','ie','iane','iste','ou','ine','ge','rie','ière','ie','ère','rge','arde','relle'];
+const LN_PREFIX = ['Mar','Ber','Tho','Pet','Rob','Ric','Dur','Ler','Mor','Sim','Lau','Lef','Mic','Gar','Dav','Ber','Rou','Vin','Fou','Mor','Gir','And','Mer','Dup','Lam','Bon','Fra','Leg','Gar','Fau','Rou','Bla','Gue','Mul','Hen','Rou','Per','Mat','Clé','Gau','Dum','Lop','Fon','Che','Rob','Mas','San','Boy','Fer','Cha','Pel','Col','Gon','Bou','Pou','Gal','Del','Méy','Vig','Car','Bou','Pag','Hum','Jar','Lav','Mou','Pai','Bré','Cas','Noe','Cos','Pir','Cha','Sol','Ber','Pal','Hém','Ros','Gui','Gau','Pla','For','Tor','Cor'];
+const LN_SUFFIX = ['tin','nard','mas','tit','ert','ard','and','oy','eau','on','ent','vre','el','ia','id','rand','x','cent','rnier','rel','ard','é','cier','ont','bert','net','çois','nd','nier','re','eau','nc','in','ler','ri','el','in','ieu','ment','thier','ont','ez','taine','lier','in','on','hez','er','ot','neau','let','in','zet','reau','rlet','lard','bry','ot','nier','ros','dron','get','eau','ard','in','llin','eau','rot','vin','ier','ter','illo','lon','ez','ier','rot','eau','in','in','nt','in','et'];
+
+function genName(gender='M'){
+  const syl = SYLLABLES_FIRST[Math.floor(Math.random()*SYLLABLES_FIRST.length)];
+  const end = gender==='M' ? SYLLABLES_END_M[Math.floor(Math.random()*SYLLABLES_END_M.length)] : SYLLABLES_END_F[Math.floor(Math.random()*SYLLABLES_END_F.length)];
+  const lp = LN_PREFIX[Math.floor(Math.random()*LN_PREFIX.length)];
+  const ls = LN_SUFFIX[Math.floor(Math.random()*LN_SUFFIX.length)];
+  return { first: syl+end, last: lp+ls, gender };
+}
+
+const PRODUCT_DATA = [
+  ...['Farine T45 1kg','Farine T55 2kg','Farine T65 1kg','Sucre blanc 1kg','Sucre roux 500g','Sel fin 1kg','Sel gros 5kg','Levure chimique 100g','Maïzena 400g','Cacao pur 200g','Chocolat noir 70% 200g','Chocolat lait 100g','Miel toutes fleurs 500g','Confiture fraise 370g','Confiture abricot 370g','Nutella 1kg','Beurre de cacahuète 350g','Huile olive vierge extra 1L','Huile tournesol 1L','Huile de coco 500ml','Vinaigre balsamique 500ml','Vinaigre blanc 1L','Sauce tomate 400ml','Ketchup 560g','Moutarde Dijon 200g','Mayonnaise 400g','Soja sauce 150ml','Tabasco 60ml','Pâtes penne 500g','Pâtes spaghetti 500g','Pâtes fusilli 500g','Pâtes tagliatelles 250g','Riz basmati 1kg','Riz long grain 2kg','Couscous moyen 500g','Quinoa bio 400g','Lentilles corail 500g','Pois chiches 500g','Haricots blancs 500g','Thon naturel 150g','Sardines huile 135g','Saumon fumé 100g','Conserve tomates pelées 400g','Concentré tomate 70g','Maïs doux 300g','Petits pois fins 400g','Haricots verts fins 440g','Soupe tomate 1L','Bouillon cube poulet x8','Curry poudre 50g','Paprika fumé 50g','Cumin graines 50g','Cannelle moulue 30g','Noix muscade 30g','Poivre noir moulu 50g','Herbes Provence 30g','Thym séché 15g','Feuilles de laurier 5g','Origan séché 10g','Céréales muesli 750g','Flocons avoine 1kg','Granola miel noix 450g','Biscuits LU 200g','Biscuits secs 400g','Crackers riz 150g','Pain de mie complet 500g','Biscottes x36','Cake fruits confits 400g','Madeleine x12','Brioche tressée 400g','Chocolat chaud poudre 250g','Lait concentré sucré 397g','Crème de coco 400ml','Lait coco 400ml'].map((n,i)=>({ref:`ALI-${String(i+1).padStart(4,'0')}`,n,cat:'Alimentaire',basePrice:Math.random()*8+0.8,unit:'Colis'})),
+  ...['Eau minérale 50cl','Eau gazeuse 1L','Eau minérale 1.5L','Eau minérale 6×1.5L','Jus orange 1L','Jus pomme 1L','Jus multifruits 1L','Jus tomate 1L','Coca-Cola 33cl','Coca-Cola 1.5L','Pepsi 1.5L','Sprite 1.5L','Fanta orange 1.5L','Red Bull 25cl','Monster Energy 50cl','Limonade 1.5L','Ice Tea pêche 1.5L','Bière blonde 33cl','Bière blanche 33cl','Bière IPA 33cl','Pack bière 24×33cl','Vin rouge Bordeaux 75cl','Vin blanc Chardonnay 75cl','Vin rosé Provence 75cl','Champagne brut 75cl','Prosecco 75cl','Porto rouge 75cl','Whisky 8 ans 70cl','Rhum blanc 70cl','Vodka 70cl','Gin 70cl','Café moulu 250g','Café grains 500g','Café soluble 200g','Capsules café x40','Thé vert 50 sachets','Thé noir English Breakfast x50','Thé camomille x20','Tisane verveine x20','Chocolat chaud 500g','Sirop grenadine 50cl','Sirop menthe 50cl','Sirop citron 50cl','Smoothie mangue 250ml','Kombucha gingembre 330ml','Kéfir nature 500ml','Lait entier 1L','Lait demi-écrémé 1L','Lait végétal amande 1L','Lait végétal avoine 1L'].map((n,i)=>({ref:`BOI-${String(i+1).padStart(4,'0')}`,n,cat:'Boissons',basePrice:Math.random()*12+1.2,unit:'Unité'})),
+  ...['Savon liquide mains 500ml','Savon solide lavande 100g','Gel douche 400ml','Shampooing cheveux normaux 400ml','Après-shampooing 300ml','Masque capillaire 200ml','Déodorant bille 50ml','Déodorant spray 200ml','Dentifrice blancheur 75ml','Brosse à dents souple','Fil dentaire 50m','Bain de bouche 500ml','Rasoir jetable x5','Mousse à raser 200ml','Crème hydratante visage 50ml','Crème corps 400ml','Lotion tonique 200ml','Sérum vitamine C 30ml','Fond de teint 30ml','Mascara noir','Rouge à lèvres mat','Crayon yeux noir','Palette fards à paupières','Dissolvant sans acétone 100ml','Coton-tiges x200','Lingettes démaquillantes x25','Cotons ronds x120','Serviettes hygiéniques ultra x14','Tampons normal x20','Culotte menstruelle L','Couches bébé taille 3 x44','Lingettes bébé 70p','Crème change bébé 100ml','Gel hydroalcoolique 500ml','Masque chirurgical x50','Masque FFP2 x10','Gants latex taille M x100','Thermomètre auriculaire','Bandages élastiques','Pansements assortis x40','Compresses stériles x20','Alcool modifié 250ml','Crème anti-douleur 60g','Huile essentielle lavande 10ml','Huile essentielle tea tree 10ml','Parfum femme 50ml EDT','Parfum homme 50ml EDT','Vernis à ongles rouge','Fixateur vernis','Démaquillant biphasé 200ml','Crème solaire SPF50 200ml','Après-soleil 200ml','Épilateur à cire froide','Coupe-ongles inox','Lime à ongles','Peigne large dents','Miroir compact','Pince à épiler','Tondeuse visage'].map((n,i)=>({ref:`HYG-${String(i+1).padStart(4,'0')}`,n,cat:'Hygiène',basePrice:Math.random()*25+2,unit:'Unité'})),
+  ...['Câble USB-A/USB-C 1m','Câble USB-C/USB-C 2m','Câble Lightning 1m','Chargeur USB 20W','Chargeur double USB 30W','Adaptateur secteur universel','Chargeur sans fil 15W','Powerbank 10000mAh','Powerbank 20000mAh','Clé USB 32Go USB3','Clé USB 64Go USB3','SSD externe 500Go','Disque dur 1To USB','Carte mémoire 64Go','Adaptateur HDMI 4K','Câble HDMI 2m 4K','Hub USB-C 7 ports','Webcam HD 1080p','Casque filaire stéréo','Casque Bluetooth ANC','Écouteurs sans fil TWS','Enceinte Bluetooth 20W','Barre de son 60W','Montre connectée sport','Bracelet fitness','Batterie AA x8','Batterie AAA x4','Batterie 9V x2','Pile bouton CR2032 x5','Lampe LED E27 9W','Lampe LED GU10 7W','Ampoule connectée RGB','Multiprise 6 prises + USB','Parasurtenseur 6 prises','Câble Ethernet RJ45 5m','Routeur WiFi 6 AX1800','Répéteur WiFi 1200Mbps','Switch réseau 8 ports','Clé WiFi USB','Imprimante jet d encre','Cartouche encre noire','Cartouche encre couleur','Toner laser noir','Scanner A4 portable','Raspberry Pi 4 4Go','Arduino Uno','Module GPS tracker','Caméra surveillance 4K','Sonnette vidéo WiFi','Détecteur fumée connecté','Prise connectée WiFi','Ampoule connectée E27','Télécommande universelle','Câble coaxial 5m','Antenne TNT intérieure','Adaptateur VGA/HDMI','Dock station USB-C','Support téléphone voiture','Film protecteur écran 6.5"','Coque silicone universelle','Batterie de rechange smartphone','Outil réparation smartphone','Ruban LED RGB 5m','Variateur LED','Minuterie mécanique','Rallonge 10m 3 prises','Disjoncteur différentiel','Câble H07RN-F 3G2.5 50m'].map((n,i)=>({ref:`ELE-${String(i+1).padStart(4,'0')}`,n,cat:'Électronique',basePrice:Math.random()*80+5,unit:'Unité'})),
+  ...['T-shirt coton blanc S','T-shirt coton blanc M','T-shirt coton blanc L','T-shirt coton blanc XL','Jean slim bleu 38','Jean slim bleu 40','Jean slim bleu 42','Jean slim bleu 44','Jean slim bleu 46','Pantalon chino beige 40','Pantalon chino beige 42','Short cargo kaki M','Short cargo kaki L','Robe fleurie S','Robe fleurie M','Jupe droite 38','Pull col rond M gris','Pull col roulé L bleu','Veste en jean L','Hoodie gris XL','Manteau trench beige M','Doudoune légère M','Imperméable L vert','Chaussures running pointure 42','Chaussures running pointure 44','Baskets lifestyle blanc 41','Baskets lifestyle blanc 43','Mocassins cuir 42','Sandales été 39','Bottines automne 38','Chaussettes sport x5 paires 39-42','Chaussettes coton x7 paires 43-46','Collants 40D taille 3','Sous-vêtements homme S x3','Soutien-gorge 90B','Boxer coton M x3','Pyjama femme M','Pyjama homme L','Nuisette S','Peignoir éponge M','Gants cuir taille 8','Écharpe laine grise','Bonnet tricoté bleu','Casquette baseball noire','Sac à dos 30L','Sac de sport 40L','Valise cabine 55cm','Ceinture cuir 95cm','Portefeuille cuir noir','Lunettes de soleil UV400'].map((n,i)=>({ref:`TEX-${String(i+1).padStart(4,'0')}`,n,cat:'Textile',basePrice:Math.random()*60+5,unit:'Unité'})),
+  ...['Perceuse visseuse 18V','Meuleuse d angle 125mm','Scie sauteuse 700W','Ponceuse orbitale 150W','Niveau à bulle 60cm','Mètre ruban 5m','Équerre 30cm','Marteau 500g','Maillet caoutchouc','Pince multiprise 250mm','Pince à bec 150mm','Tournevis PH2 x3 set','Tournevis plat set','Clé à molette 250mm','Set clés allen 9pcs','Set embouts vissage 60pcs','Scie égoïne 500mm','Scie à métaux','Cutter 18mm','Ciseaux à bois set 4','Cisailles jardin 200mm','Pistolet à colle 60W','Bâtons colle x20','Colle époxy bicomposant','Colle super glue x3','Ruban adhésif 48mm×50m','Ruban isolant noir x5','Ruban alu 50mm×50m','Vis tête fraisée 4×40 x200','Vis bois 5×60 x100','Cheville nylon 6mm x100','Boulon M8×50 zingué x20','Écrous M8 x50','Rondelles M8 x100','Pointe tête plate 2.5mm 500g','Pince à river 4mm','Rivets alu 4×10 x100','Serre-joint 300mm','Serre-joint 600mm','Papier abrasif P80 x10','Papier abrasif P120 x10','Bâche protection 4×5m','Masque poussière FFP2','Lunettes protection transparentes','Casque anti-bruit 25dB','Gants de travail cuir M','Bottes sécurité S3 42','Vêtement haute visibilité XL','Combinaison peinture M','Peinture mur blanc mat 5L','Peinture bois satin 0.5L','Apprêt universel 0.5L','Enduit rebouchage 330g','Mastic silicone transparent 310ml','Joint d étanchéité 10m','Grillage souple 1×10m','Câble acier 3mm 10m','Seau 12L','Pinceaux peinture set 5'].map((n,i)=>({ref:`BRI-${String(i+1).padStart(4,'0')}`,n,cat:'Bricolage',basePrice:Math.random()*120+3,unit:'Unité'})),
+  ...['Casserole inox 18cm','Casserole inox 22cm','Poêle antiadhésive 24cm','Poêle antiadhésive 28cm','Wok 30cm','Fait-tout 24cm 5L','Cocotte minute 6L','Cuiseur vapeur électrique 900W','Grille-pain 2 fentes','Bouilloire électrique 1.7L','Cafetière filtre 1.25L','Machine à capsules','Blender puissant 1L','Mixeur plongeant 800W','Robot cuisine 800W','Friteuse sans huile 4L','Micro-ondes 20L','Four grille-pain','Planche à découper bois 40cm','Couteau chef 20cm','Couteau pain 20cm','Set couteaux 5 pièces','Économe inox','Écumoire inox','Louche inox','Spatule silicone','Fouet inox 30cm','Passoire inox 24cm','Saladier verre 25cm','Bol mélangeur 3L','Moule gâteau 26cm','Moule cake 30cm','Ramequins porcelaine x6','Service assiettes 12p','Assiettes plates blanches x6','Tasses café x6','Verres à eau x6','Verres à vin x6','Carafes 1L','Carafe filtrante 3L','Filtres carafe x8','Boîte hermétique 1L','Boîte hermétique 2L','Set boîtes verre 3p','Papier sulfurisé 10m','Film alimentaire 30m','Sac congélation x20','Torchons coton x3','Tablier cuisine','Dessous de plat liège x4','Poubelle cuisine 10L','Sac poubelle 30L x30','Sac poubelle 50L x20','Éponge vaisselle x10','Liquide vaisselle 750ml','Pastilles lave-vaisselle x42','Sel régénérant lave-vaisselle 2kg','Détartrant cafetière','Nettoyant four 500ml','Serpillère microfibre'].map((n,i)=>({ref:`CUI-${String(i+1).padStart(4,'0')}`,n,cat:'Maison',basePrice:Math.random()*90+2,unit:'Unité'})),
+  ...['Terreau universel 20L','Terreau orchidées 5L','Substrat cactus 5L','Compost naturel 40L','Engrais granulés universel 1kg','Engrais liquide tomates 1L','Insecticide naturel 500ml','Herbicide gazon 1L','Fongicide rosiers 250ml','Graines tomates cerise','Graines basilic','Graines radis','Graines carottes','Bulbes tulipes x10','Plants de lavande 1L','Pot terre cuite 20cm','Pot plastique 30cm','Jardinière balcon 80cm','Arrosoir 10L','Tuyau d arrosage 25m','Raccord tuyau arrosage','Pistolet arrosage multijet','Programmateur arrosage','Sécateur professionnel','Cisaille haie 45cm','Taille-haie électrique 500W','Tonte pelouse manuelle','Tondeuse gazon 1500W','Souffleur feuilles 2500W','Débroussailleuse 800W','Pelle ronde acier','Bêche inox','Râteau 16 dents','Fourche bêche 4 dents','Seau jardinage 15L','Gants jardinage L','Manche bêche 130cm','Filet anti-insectes 4×5m','Géotextile 1×10m','Tuteur bambou 120cm x10'].map((n,i)=>({ref:`JAR-${String(i+1).padStart(4,'0')}`,n,cat:'Jardin',basePrice:Math.random()*60+3,unit:'Unité'})),
+  ...['Haltères 2×5kg','Haltères 2×10kg','Haltères 2×15kg','Kettlebell 16kg','Barre musculation 150cm','Corde à sauter pro','Tapis yoga 6mm','Tapis de sol gym','Élastiques résistance x5','Rouleau massage foam','Ceinture abdominale','Gants musculation M','Genouillères sport','Sac frappe 40kg','Gants boxe 12oz','Casque boxe','Chaussures de sport T42','Chaussures trail T44','Chaussures football T41','Chaussures tennis T43','Raquette tennis adulte','Balles tennis x4','Ballon football T5','Ballon basketball T7','Filet badminton','Raquettes badminton x2','Volants badminton x6','Table ping-pong','Raquettes ping-pong x2','Balles ping-pong x6','Vélo route taille M','Vélo VTT taille L','Casque vélo taille M','Antivol vélo câble','Chambre à air 700×25','Gonfleur vélo','Patins à roulettes T38','Skateboard complet','Trottinette électrique 25km/h','Montre GPS running','Compteur vélo sans fil','Bidon sport 750ml','Sac hydratation 2L','Crampons trail T42','Chaussettes trail x3','Short sport XL','Veste coupe-vent L','Legging sport femme M','Maillot natation homme L','Palmes nageur taille L'].map((n,i)=>({ref:`SPO-${String(i+1).padStart(4,'0')}`,n,cat:'Sport',basePrice:Math.random()*150+5,unit:'Unité'})),
+  ...['Paracétamol 500mg x16','Ibuprofène 400mg x20','Aspirine 500mg x30','Vitamine C 1000mg x30','Vitamine D3 2000UI x90','Magnésium marin 300mg x60','Oméga 3 1000mg x60','Probiotiques x30 gélules','Mélatonine 1mg x30','Somnifère végétal x15','Antispasmodique x20','Antihistaminique x10','Sirop toux adulte 150ml','Spray nasal décongestionnant','Solution nasale isotonique','Gouttes oculaires 10ml','Crème anti-brûlure 30g','Gel aloé vera 250ml','Compresses stériles 10×10 x25','Bandes Velpeau 5m','Filet tubulaire jersey 2m','Sérum physiologique x30 unidoses','Sparadrap tissu 5m','Désinfectant plaies 250ml','Thermomètre digital buccal','Tensiomètre électronique','Oxymètre de pouls','Inhalateur vapeur','Masque de sommeil','Protection solaire SPF50+ 100ml','Répulsif moustiques 100ml','Pommade chauffante 60g','Gel refroidissant 150ml','Patch chauffant dos x5','Protège-genoux M','Semelles orthopédiques L','Ceinture lombaire L','Collier cervical','Béquilles axillaires taille 2','Chaussette de contention classe 2 T3'].map((n,i)=>({ref:`PHA-${String(i+1).padStart(4,'0')}`,n,cat:'Pharmacie',basePrice:Math.random()*40+3,unit:'Boîte'})),
+  ...['Ramette A4 80g 500f','Ramette A3 80g 250f','Cahier grand format 200p','Cahier petits carreaux 96p','Carnet A5 ligné','Agenda 2025 semainier','Agenda 2025 journalier','Post-it 76×76 x4','Stylo bille bleu x10','Stylo bille rouge x10','Stylo gel noir x5','Crayon HB x12','Crayon de couleur 24','Feutre pointe fine x20','Surligneurs x5 couleurs','Correcteur liquide 20ml','Colle bâton 21g','Colle liquide 100ml','Ciseaux 17cm','Taille-crayon double','Gomme blanche','Règle 30cm inox','Rapporteur 180°','Équerre 45°','Compas collège','Calculatrice scientifique','Calculatrice de bureau','Classeur A4 rigide 8cm','Chemise cartonnée x25','Pochette plastique A4 x100','Séparateurs couleurs x31','Boîte archives 35cm','Porte-document 30 vues','Agrafeuse 26/6 desktop','Agrafes 26/6 x1000','Perforatrice 2 trous','Dérouleur scotch desktop','Scotch 19mm×33m x8','Élastiques caoutchouc 100g','Trombones nickelés x100'].map((n,i)=>({ref:`BUR-${String(i+1).padStart(4,'0')}`,n:n,cat:'Bureautique',basePrice:Math.random()*30+0.5,unit:'Unité'})),
+].flat().filter(p=>p&&p.ref);
+
+PRODUCT_DATA.forEach((p,i)=>{if(!p.ref||p.ref.includes('undefined'))p.ref='MIS-'+String(i).padStart(4,'0');});
+
+const PAL_TYPES=['Standard','Frais','Sec','Lourd','Fragile','Dangereux','Volumineux','Réfrigéré'];
+const ALLEES=['A01','A02','A03','A04','A05','A06','A07','A08','A09','A10','A11','A12',
+  'B01','B02','B03','B04','B05','B06','B07','B08','B09','B10','B11','B12',
+  'C01','C02','C03','C04','C05','C06','C07','C08','C09','C10','C11','C12',
+  'D01','D02','D03','D04','D05','D06','D07','D08','D09','D10','D11','D12',
+  'E01','E02','E03','E04','E05','E06','E07','E08','E09','E10','E11','E12'];
+const ETAGERES=['E1','E2','E3','E4','E5','E6','E7','E8'];
+const RACKS=['R01','R02','R03','R04','R05','R06','R07','R08','R09','R10','R11','R12','R13','R14','R15','R16'];
+const TEAMS=['Matin (6h-14h)','AprèsMidi (14h-22h)','Nuit (22h-6h)'];
+const VOICE_MSGS=['"Confirmé — allée {l}"','"Pris — quantité {q}"','"Colis scanné OK"','"En route vers {l}"','"Palette pleine — suivante?"','"Erreur scan — répétez"','"Stock vide en {l}"','"Quantité {q} confirmée"','"Prêt pour suivant"','"Position confirmée"','"Aide requise allée {l}"'];
+const QUAIS=['Q01','Q02','Q03','Q04','Q05','Q06','Q07','Q08','Q09','Q10','Q11','Q12'];
+const CARRIERS=['Chronopost','DHL','Colissimo','UPS','Fedex','GLS','TNT','DB Schenker','Geodis','XPO Logistics'];
+
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1)+a);}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function hex(n){let s='';for(let i=0;i<n;i++)s+='0123456789ABCDEF'[rnd(0,15)];return s;}
+function fmt(n){return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+'€';}
+function fmtK(n){return n>=1000?(n/1000).toFixed(1)+'k€':fmt(n);}
+
+let G = {
+  mgrName:'', whName:'', budget:500000, startBudget:500000,
+  day:1, hour:6, minute:0,
+  coupDeBourreUsed: false,
+  difficulty:'easy',
+  totalRevenue:0, totalCosts:0,
+  todayRevenue:0, todayPalettes:0, totalPalettes:0,
+  workers:[], stocks:[], docks:[], notifications:[],
+  palettePool:[], waitingPalettes:[],
+  marketPrices:{}, pendingOrders:[],
+  finances:{ salaryPaid:0, stockCost:0, revenue:0, misc:0 },
+  hrHistory:[],
+  tickMessages:[], rankMode:'rate', hrFilter:'all', notifFilter:'all',
+  stockFilter:'all', marketFilter:'all',
+  selWorkerId:null,
+  workerZone:'all', workerStatus:'all', workerSearch:'',
+  stockSortK:'ref', stockSortD:1,
+  workerSortK:'id', workerSortD:1,
+  revenuePerPalette:120,
+  initialized:false,
+};
+
+let SETUP_BUDGET=500000, SETUP_WORKERS=150, SETUP_DIFF='easy';
+
+function selectBudget(v,el){
+  SETUP_BUDGET=v;
+  document.querySelectorAll('#budget-options .setup-radio').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selectWorkers(v,el){
+  SETUP_WORKERS=v;
+  el.closest('.setup-radio-group').querySelectorAll('.setup-radio').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selectDiff(v,el){
+  SETUP_DIFF=v;
+  el.closest('.setup-radio-group').querySelectorAll('.setup-radio').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+const MOTIV_PHRASES = [
+  "Je suis passionné par la logistique depuis 5 ans.",
+  "J'aime le travail en équipe et les défis physiques.",
+  "Motivé, ponctuel, je cherche un poste stable.",
+  "J'ai une bonne condition physique et je suis rigoureux.",
+  "La gestion des stocks m'intéresse beaucoup.",
+  "Je veux progresser dans le secteur logistique.",
+  "J'aime les environnements dynamiques et organisés.",
+  "Je suis disponible sur tous les horaires, y compris la nuit.",
+];
+const TEMP_PHRASES = [
+  "Calme et méthodique, je travaille efficacement sous pression.",
+  "Dynamique, parfois impatient mais toujours efficace.",
+  "Rigoureux et perfectionniste dans mon travail.",
+  "Sociable, j'aime travailler en équipe.",
+  "Indépendant, j'apprécie avoir des responsabilités.",
+  "Réservé mais très fiable sur le long terme.",
+  "Enthousiaste et adaptable aux changements.",
+  "Méticuleux, j'ai le sens du détail.",
+];
+const SKILL_PHRASES = [
+  "Expérience 2 ans en entrepôt, conduite de chariots CACES 3.",
+  "Connaissance des systèmes vocaux Vocollect et Honeywell.",
+  "Maîtrise WMS, expérience cross-docking.",
+  "Débutant motivé, formation rapidement assimilée.",
+  "CACES 1B+3+5, 4 ans d'expérience logistique.",
+  "Spécialisation produits frais, zone température dirigée.",
+  "Gestion inventaire, reconditionnement, 3 ans XP.",
+  "Sans expérience mais grande disponibilité et motivation.",
+];
+
+
+// Worker personality traits
+const WORKER_TRAITS = [
+  {name:'Gros bosseur', rateMultiplier:1.4, errorMultiplier:0.7, pauseFreq:0.3},
+  {name:'Bosseur', rateMultiplier:1.15, errorMultiplier:0.85, pauseFreq:0.5},
+  {name:'Motivé', rateMultiplier:1.1, errorMultiplier:0.9, pauseFreq:0.6},
+  {name:'Normal', rateMultiplier:1.0, errorMultiplier:1.0, pauseFreq:0.8},
+  {name:'Distrait', rateMultiplier:0.85, errorMultiplier:1.3, pauseFreq:1.0},
+  {name:'Tir-au-flanc', rateMultiplier:0.6, errorMultiplier:1.5, pauseFreq:1.4},
+  {name:'Flemme', rateMultiplier:0.5, errorMultiplier:1.8, pauseFreq:1.6},
+];
+
+function assignTrait() {
+  const roll = Math.random();
+  if(roll < 0.08) return WORKER_TRAITS[0]; // 8% gros bosseur
+  if(roll < 0.25) return WORKER_TRAITS[1]; // 17% bosseur
+  if(roll < 0.45) return WORKER_TRAITS[2]; // 20% motivé
+  if(roll < 0.85) return WORKER_TRAITS[3]; // 40% normal
+  if(roll < 0.94) return WORKER_TRAITS[4]; // 9% distrait
+  if(roll < 0.98) return WORKER_TRAITS[5]; // 4% tir-au-flanc
+  return WORKER_TRAITS[6]; // 2% flemme
+}
+
+function genWorker(id, forcedStatus) {
+  const nm = genName(Math.random()<.55?'M':'F');
+  const trait = assignTrait();
+  const allée = pick(ALLEES);
+  const total = rnd(12,38);
+  const done = rnd(0,total-1);
+  const baseRate = Math.round(rnd(30,120) * trait.rateMultiplier);
+  const status = forcedStatus || (Math.random()<.82 ? 'picking' : Math.random()<.5 ? 'idle' : 'break');
+  const shiftIdx = rnd(0,2);
+  const salary = parseFloat((rnd(1180,2100)/160).toFixed(2));
+  return {
+    id: 'WRK-'+String(id).padStart(3,'0'),
+    name: nm.first+' '+nm.last,
+    fn: nm.first, ln: nm.last, gender: nm.gender,
+    color: ['#388bfd','#3fb950','#d29922','#f85149','#a371f7','#39d8c8','#e07b33'][id%7],
+    team: TEAMS[shiftIdx], shiftIdx,
+    status, zone: allée[0], allée,
+    étagère: pick(ETAGERES), rack: pick(RACKS),
+    rate: status==='picking'?baseRate:0,
+    baseRate, errors:0, scanned:0,
+    salary,
+    progress:{done,total},
+    palette:'PAL-'+hex(4), paletteType:pick(PAL_TYPES),
+    orderList: makeWorkerOL(done,total),
+    palettesFinished:0,
+    shiftStart:'06:00',
+    voiceActive:false, voiceMsg:'—',
+    warnings:[], fired:false, onLeave:false,
+    requests:[], lastUpdate: new Date(),
+    path:[], // [allée-étagère-rack] array of positions
+    motivation:rnd(50,99), reliability:rnd(45,99),
+    seniority:rnd(0,120),
+    hrNote:'',
+    hireDate: new Date(),
+  };
+}
+
+function makeWorkerOL(done, total){
+  return Array.from({length:total},(_,i)=>{
+    const p = pick(PRODUCT_DATA);
+    const al=pick(ALLEES),et=pick(ETAGERES),rk=pick(RACKS);
+    return {ref:p.ref,name:p.n,qty:rnd(1,12),loc:`${al}-${et}-${rk}`,done:i<done};
+  });
+}
+
+function initStocks(){
+  G.stocks = PRODUCT_DATA.map(p=>{
+    const max = rnd(150,2000);
+    const curr = rnd(10,max);
+    const thresh = Math.floor(max*.18);
+    const price = p.basePrice*(0.85+Math.random()*.3);
+    return {
+      ref:p.ref, name:p.n, cat:p.cat,
+      stock:curr, maxStock:max, threshold:thresh,
+      price: parseFloat(price.toFixed(2)),
+      basePriceRef: p.basePrice,
+      priceChange:0,
+      pendingQty:0, pendingArrival:0,
+      level:curr<thresh?(curr<thresh*.3?'crit':'low'):'ok',
+    };
+  });
+}
+
+function initDocks(){
+  G.docks = QUAIS.map(q=>({
+    id:q, truck:'TRK-'+hex(3),
+    carrier:pick(CARRIERS), palettes:[],
+    maxPalettes:rnd(8,18),
+    departureGameHour: (G.hour+rnd(4,14))%24,
+    status:'active',
+  }));
+}
+
+function initMarket(){
+  PRODUCT_DATA.forEach(p=>{
+    G.marketPrices[p.ref] = parseFloat((p.basePrice*(0.85+Math.random()*.3)).toFixed(2));
+  });
+}
+
+function startGame(){
+  const custB = parseInt(document.getElementById('custom-budget').value);
+  G.budget = (custB>0?custB:SETUP_BUDGET);
+  G.startBudget = G.budget;
+  G.mgrName = document.getElementById('mgr-name').value||'Directeur';
+  G.whName = document.getElementById('wh-name').value||'Entrepôt';
+  G.difficulty = SETUP_DIFF;
+  G.revenuePerPalette = G.difficulty==='easy'?140:G.difficulty==='normal'?110:85;
+
+  let wCount = SETUP_WORKERS;
+  G.workers = Array.from({length:wCount},(_,i)=>genWorker(i+1));
+  initStocks();
+  initDocks();
+  initMarket();
+
+  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('main-app').classList.add('show');
+  document.getElementById('wh-title').textContent=G.whName;
+  document.getElementById('wh-sub').textContent='Directeur: '+G.mgrName;
+  document.getElementById('rev-per-pal').textContent=G.revenuePerPalette+'€';
+
+  G.initialized=true;
+  startSimulation();
+  
+  // Initial render
+  renderTable();
+  renderDocks();
+  renderDockWaiting();
+  updateKPIs(0);
+
+  addNotif('info','🟢 Entrepôt opérationnel',`Bienvenue ${G.mgrName} ! Budget initial: ${fmtK(G.budget)} — ${G.workers.length} préparateurs actifs.`,'system');
+  addTicker('good','✅',`Entrepôt ${G.whName} opérationnel — ${G.workers.length} préparateurs — Budget ${fmtK(G.budget)}`);
+}
+
+let realTimerInterval=null;
+function startSimulation(){
+  realTimerInterval = setInterval(()=>{
+    if(!G.initialized) return;
+    G.minute+=1;
+    if(G.minute>=60){G.minute-=60;G.hour++;}
+    if(G.hour>=24){G.hour=0;G.day++;endOfDay();}
+    updateClock();
+    simTick();
+  },1000);
+}
+
+function updateClock(){
+  const h=String(G.hour).padStart(2,'0'), m=String(G.minute).padStart(2,'0');
+  document.getElementById('clock').textContent=h+':'+m;
+  const shift = G.hour>=6&&G.hour<14?'Matin':G.hour>=14&&G.hour<22?'Après-midi':'Nuit';
+  const dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  const dayOfWeek = dayNames[(G.day-1) % 7];
+  document.getElementById('day-badge').textContent=`${dayOfWeek} J${G.day} — ${shift}`;
+  document.body.classList.toggle('night-mode',G.hour<6||G.hour>=22);
+}
+
+
+function coupDeBourre(){
+  if(G.coupDeBourreUsed){
+    addTicker('warn','⚠','Coup de bourre déjà utilisé aujourd\'hui!');
+    return;
+  }
+  
+  G.coupDeBourreUsed = true;
+  document.getElementById('coup-btn').disabled = true;
+  document.getElementById('coup-btn').style.opacity = '0.5';
+  
+  let boosted = 0;
+  G.workers.filter(w=>!w.fired&&!w.onLeave).forEach(w=>{
+    // Assign palette if needed
+    if(w.status==='idle'||w.status==='break'||w.progress.done>=w.progress.total){
+      startNewPalette(w);
+    }
+    // Boost to 150 col/h
+    w.status='picking';
+    w.rate=150;
+    boosted++;
+  });
+  
+  addNotif('crit','⚡ COUP DE BOURRE ACTIVÉ',`${boosted} préparateurs boostés à 150 col/h!`,'system');
+  addTicker('crit','⚡',`COUP DE BOURRE: ${boosted} workers à 150 col/h!`);
+  
+  // Reset at end of day
+}
+
+function endOfDay(){
+  // Reset coup de bourre
+  G.coupDeBourreUsed = false;
+  const btn = document.getElementById('coup-btn');
+  if(btn){btn.disabled=false;btn.style.opacity='1';}
+  
+  // Reset worker pause counters
+  G.workers.forEach(w=>{w.pausesTaken=0;w.lastPauseTime=0;});
+  
+  const totalSalary = G.workers.filter(w=>!w.fired&&!w.onLeave).reduce((s,w)=>s+(w.salary*8),0);
+  const charges = totalSalary*0.42;
+  const totalCost = totalSalary+charges;
+  G.budget -= totalCost;
+  G.finances.salaryPaid += totalCost;
+  G.todayRevenue=0; G.todayPalettes=0;
+  addNotif('crit','💶 Masse salariale journée J'+G.day,
+    `Salaires: ${fmt(totalSalary)} + Charges: ${fmt(charges)} = ${fmt(totalCost)} déduit du budget`,'finance');
+  addTicker('warn','💶',`Salaires J${G.day}: ${fmt(totalCost)} prélevés`);
+
+  PRODUCT_DATA.forEach(p=>{
+    const prev = G.marketPrices[p.ref]||p.basePrice;
+    const chg = (Math.random()-.5)*.12;
+    G.marketPrices[p.ref] = Math.max(p.basePrice*.5, prev*(1+chg));
+  });
+
+  G.stocks.forEach(s=>{
+    if(s.pendingArrival>0&&Math.random()<.4){
+      s.stock=Math.min(s.maxStock,s.stock+s.pendingArrival);
+      s.pendingQty=0;s.pendingArrival=0;
+      addTicker('good','📦',`Livraison reçue: ${s.name}`);
+    }
+  });
+
+  G.workers.filter(w=>!w.fired&&Math.random()<.06).forEach(w=>{
+    generateWorkerRequest(w);
+  });
+
+  
+  // Auto-assign waiting palettes if waiting too long (>10 min real)
+  const waitingTooLong = G.waitingPalettes.filter(p=>(Date.now()-p.waitingSince)>600000);
+  if(waitingTooLong.length > 0){
+    waitingTooLong.forEach(p=>{
+      const availDock = G.docks.find(d=>d.palettes.length < d.maxPalettes);
+      if(availDock){
+        assignToDock(p.id, availDock.id);
+        addTicker('warn','⏱',`Auto: ${p.id} → ${availDock.id} (attente >10min)`);
+      }
+    });
+  }
+}
+
+
+const RANDOM_EVENTS = [
+  {
+    id: 'strike',
+    name: '🚛 Grève des transporteurs',
+    desc: 'Les quais sont bloqués pendant 3 minutes',
+    duration: 180000, // 3 min real
+    onStart: ()=>{
+      G.docks.forEach(d=>d.blocked=true);
+      addNotif('crit','🚛 GRÈVE','Les transporteurs bloquent les quais! Durée: 3 min','event');
+    },
+    onEnd: ()=>{
+      G.docks.forEach(d=>d.blocked=false);
+      addTicker('good','✅','Grève terminée - quais réouverts');
+    }
+  },
+  {
+    id: 'promo_tech',
+    name: '📱 Promotion high-tech',
+    desc: 'Commandes électronique ×2 pendant 2 min',
+    duration: 120000,
+    onStart: ()=>{
+      addNotif('info','📱 PROMO','Promotion sur l\'électronique - rush de commandes!','event');
+      G.promoActive = true;
+    },
+    onEnd: ()=>{
+      G.promoActive = false;
+      addTicker('info','📱','Fin de la promotion');
+    }
+  },
+  {
+    id: 'chariot_panne',
+    name: '🔧 Panne chariot',
+    desc: 'Productivité -30% pendant 4 min',
+    duration: 240000,
+    onStart: ()=>{
+      addNotif('warn','🔧 PANNE','Chariot élévateur en panne - productivité réduite','event');
+      G.workers.forEach(w=>{if(!w.fired&&w.status==='picking')w.rate*=0.7;});
+    },
+    onEnd: ()=>{
+      addTicker('good','🔧','Chariot réparé');
+    }
+  },
+  {
+    id: 'inspection',
+    name: '👮 Inspection sécurité',
+    desc: 'Tous les workers ralentissent pendant 2 min',
+    duration: 120000,
+    onStart: ()=>{
+      addNotif('warn','👮 INSPECTION','Inspection de sécurité en cours','event');
+      G.workers.forEach(w=>{if(w.status==='picking')w.rate=Math.max(30,w.rate*0.5);});
+    },
+    onEnd: ()=>{
+      addTicker('info','👮','Inspection terminée');
+    }
+  },
+  {
+    id: 'coffee_break',
+    name: '☕ Pause café collective',
+    desc: '50% des workers en pause pendant 10 min réelles',
+    duration: 600000,
+    onStart: ()=>{
+      const workers = G.workers.filter(w=>!w.fired&&!w.onLeave&&w.status==='picking');
+      const toPause = workers.slice(0, Math.floor(workers.length*0.5));
+      toPause.forEach(w=>w.status='break');
+      addNotif('info','☕ PAUSE','Pause café collective','event');
+    },
+    onEnd: ()=>{
+      addTicker('info','☕','Fin de la pause collective');
+    }
+  },
+  {
+    id: 'bonus_energy',
+    name: '⚡ Boost d\'énergie',
+    desc: 'Tous les workers +20% productivité pendant 5 min',
+    duration: 300000,
+    onStart: ()=>{
+      addNotif('good','⚡ BOOST','Motivation au top - productivité augmentée!','event');
+      G.workers.forEach(w=>{if(w.status==='picking')w.rate*=1.2;});
+    },
+    onEnd: ()=>{
+      addTicker('info','⚡','Fin du boost');
+    }
+  }
+];
+
+function triggerRandomEvent(){
+  if(G.activeEvent) return; // Event already running
+  
+  const now = Date.now();
+  if(now - G.lastEventTime < 600000) return; // Min 10 min between events
+  
+  if(Math.random() < 0.003){ // ~0.3% chance per tick
+    const event = pick(RANDOM_EVENTS);
+    G.activeEvent = event.id;
+    G.lastEventTime = now;
+    
+    addTicker('crit','🎲',`ÉVÉNEMENT: ${event.name}`);
+    event.onStart();
+    
+    setTimeout(()=>{
+      event.onEnd();
+      G.activeEvent = null;
+    }, event.duration);
+  }
+}
+
+function simTick(){
+  let alertCnt=0;
+  G.workers.forEach(w=>{
+    if(w.fired||w.onLeave) return;
+    const isActive = (w.shiftIdx===0&&G.hour>=6&&G.hour<14)||(w.shiftIdx===1&&G.hour>=14&&G.hour<22)||(w.shiftIdx===2&&(G.hour>=22||G.hour<6));
+    if(!isActive&&w.status==='picking'){w.status='break';return;}
+    if(!isActive) return;
+
+    // Idle workers should get back to work quickly
+    if(w.status==='idle'){
+      if(w.progress.done >= w.progress.total || !w.palette){
+        // No palette or finished - assign new one
+        if(Math.random()<0.05){
+          startNewPalette(w);
+        }
+      } else {
+        // Has unfinished palette - resume work
+        if(Math.random()<0.02){
+          w.status='picking';
+          w.rate=w.baseRate*(0.9+Math.random()*0.2);
+        }
+      }
+    }
+    if(w.status==='alert'&&Math.random()<.003){w.status='picking';w.rate=rnd(45,80);}
+
+    if(w.status==='picking'){
+      w.rate=Math.max(15,Math.min(200,w.rate+(Math.random()-.48)*0.4));
+      w.rate=Math.round(w.rate*10)/10;
+
+      const pickProb = w.rate / 3600;
+      if(Math.random() < pickProb){
+        if(w.progress.done<w.progress.total){
+          w.progress.done++;w.scanned++;
+          w.orderList[w.progress.done-1].done=true;
+          if(w.progress.done<w.progress.total){
+            const nx=w.orderList[w.progress.done];
+            const pts=nx.loc.split('-');
+            w.allée=pts[0]||w.allée;
+            w.étagère=pts[1]||pick(ETAGERES);
+            w.rack=pts[2]||pick(RACKS);
+            w.zone=w.allée[0];
+            // Track path
+            w.path.push(`${w.allée}-${w.étagère}-${w.rack}`);
+            if(w.path.length > 50) w.path.shift(); // limit to last 50 positions
+          }
+          if(Math.random()<.025){w.errors++;if(Math.random()<.3)addTicker('warn','⚠',`Erreur scan: ${w.name} (${w.allée})`);}
+          w.lastUpdate=new Date();
+        } else {
+          paletteDone(w);
+        }
+      }
+      // Alert if below 90 col/h
+      if(w.rate<90&&Math.random()<.015&&!w.lowRateWarned){
+        w.lowRateWarned = true;
+        addNotif('warn','⚠ Productivité faible',`${w.name} — ${w.rate.toFixed(0)} col/h (objectif: 90)`,`worker`);
+        addTicker('warn','⚠',`${w.name}: ${w.rate.toFixed(0)} col/h`);
+      }
+      if(w.rate>=90) w.lowRateWarned = false;
+      
+      // Alert critical if below 35
+      if(w.rate<35&&Math.random()<.008){
+        w.status='alert';
+        addNotif('crit','⚠ Alerte productivité critique',`${w.name} — ${w.rate.toFixed(0)} col/h`,'system');
+        addTicker('warn','⚠',`CRITIQUE: ${w.name} — ${w.rate.toFixed(0)} col/h`);
+      }
+      if(Math.random()<.008){
+        w.voiceMsg=pick(VOICE_MSGS).replace('{l}',`${w.allée}-${w.étagère}-${w.rack}`).replace('{q}',rnd(1,12));
+        w.voiceActive=true;
+        setTimeout(()=>{w.voiceActive=false;},rnd(2000,5000));
+      }
+    }
+    if(w.status==='alert') alertCnt++;
+  });
+
+  if(Math.random()<.005){
+    const s=pick(G.stocks);
+    if(s&&s.stock>0){
+      s.stock=Math.max(0,s.stock-rnd(1,2));
+      s.level=s.stock<s.threshold?(s.stock<s.threshold*.3?'crit':'low'):'ok';
+      if(s.stock===0&&Math.random()<.2){
+        addTicker('warn','🔴',`Rupture stock: ${s.ref} — ${s.name.substring(0,25)}`);
+      }
+    }
+  }
+
+
+  // Pause management: max 20 workers on break, 2×30min per day with 5h spacing
+  const onBreak = G.workers.filter(w=>w.status==='break'&&!w.fired&&!w.onLeave).length;
+  const gameMinutesSinceDayStart = (G.hour - 6) * 60 + G.minute;
+  
+  G.workers.forEach(w=>{
+    if(w.fired||w.onLeave||w.status!=='picking') return;
+    
+    const timeSinceLastPause = gameMinutesSinceDayStart - w.lastPauseTime;
+    
+    // First pause after 2-3 hours
+    if(w.pausesTaken===0 && gameMinutesSinceDayStart>120 && gameMinutesSinceDayStart<180 && onBreak<20 && Math.random()<0.001*w.trait.pauseFreq){
+      w.status='break';
+      w.pausesTaken=1;
+      w.lastPauseTime=gameMinutesSinceDayStart;
+      setTimeout(()=>{if(!w.fired)w.status='idle';},1800000); // 30 min real = 30×60×1000
+    }
+    
+    // Second pause 5h+ after first
+    if(w.pausesTaken===1 && timeSinceLastPause>300 && onBreak<20 && Math.random()<0.001*w.trait.pauseFreq){
+      w.status='break';
+      w.pausesTaken=2;
+      w.lastPauseTime=gameMinutesSinceDayStart;
+      setTimeout(()=>{if(!w.fired)w.status='idle';},1800000);
+    }
+  });
+
+  updateKPIs(alertCnt);
+  
+  // Truck departures - check every tick
+  G.docks.forEach(d=>{
+    const isFull = d.palettes.length >= d.maxPalettes;
+    const isPastDepartureTime = (G.day > d.departureDay) || (G.day === d.departureDay && G.hour >= d.departureHour);
+    
+    // Depart immediately if full OR if past departure time with palettes
+    const shouldDepart = isFull || (d.palettes.length > 0 && isPastDepartureTime);
+    
+    if(shouldDepart && d.palettes.length > 0 && !d.blocked){
+      const revenue = d.palettes.reduce((s,p)=>s+p.revenue, 0);
+      G.budget += revenue;
+      G.todayRevenue += revenue;
+      G.totalRevenue += revenue;
+      addTicker('good','🚚',`${d.truck} parti J${d.departureDay} ${String(d.departureHour).padStart(2,'0')}h — ${d.palettes.length} pal. — +${fmt(revenue)}`);
+      
+      // Reset dock with new truck
+      d.palettes = [];
+      d.truck = 'TRK-'+hex(3);
+      d.carrier = pick(CARRIERS);
+      d.departureHour = (G.hour + rnd(3,8)) % 24;
+      d.departureDay = d.departureHour < G.hour ? G.day + 1 : G.day;
+      
+      if(activeTab==='docks') {
+        renderDocks();
+        renderDockWaiting();
+      }
+    }
+  });
+
+  
+  // Random events
+  triggerRandomEvent();
+  
+
+  // Auto-assign palettes if too many workers idle with no work
+  if(G.hour % 2 === 0 && G.minute === 0){ // every 2 game hours
+    const inShiftWorkers = G.workers.filter(w=>{
+      if(w.fired||w.onLeave)return false;
+      const isInShift = (w.shiftIdx===0&&G.hour>=6&&G.hour<14)||(w.shiftIdx===1&&G.hour>=14&&G.hour<22)||(w.shiftIdx===2&&(G.hour>=22||G.hour<6));
+      return isInShift;
+    });
+    const idleNoWork = inShiftWorkers.filter(w=>(w.status==='idle'||w.status==='break')&&w.progress.done>=w.progress.total);
+    if(idleNoWork.length > inShiftWorkers.length*0.4){
+      idleNoWork.forEach(w=>startNewPalette(w));
+      addTicker('info','🤖',`Auto-assignation: ${idleNoWork.length} palettes générées`);
+    }
+  }
+  if(document.getElementById('t-workers').classList.contains('active')||activeTab==='workers') renderTable();
+  if(activeTab==='ranking') renderRanking();
+  if(activeTab==='stats') renderStats();
+  if(activeTab==='stock') renderStock();
+  if(activeTab==='hr') renderHR();
+  if(activeTab==='finance') renderFinance();
+  if(activeTab==='docks') renderDocksAuto();
+  if(activeTab==='notifs') renderNotifs();
+  if(activeTab==='map') renderMap();
+  if(G.selWorkerId) updDetail(G.workers.find(w=>w.id===G.selWorkerId));
+}
+
+function paletteDone(w){
+  w.palettesFinished++;
+  G.totalPalettes++;
+  G.todayPalettes++;
+  G.waitingPalettes.push({
+    id:'PAL-'+hex(4),
+    worker:w.name, workerId:w.id,
+    type:w.paletteType,
+    items:w.progress.total,
+    completedAt:new Date(),
+    waitingSince: Date.now(),
+    revenue: G.revenuePerPalette + rnd(-15,25),
+  });
+  addTicker('good','✅',`Palette terminée: ${w.name} — ${w.palette}`);
+  addNotif('req','📦 Palette à assigner',`${w.name} a terminé ${w.palette} (${w.paletteType}) — à assigner sur un quai.`,'dock');
+  if(activeTab==='docks') renderDockWaiting();
+
+  w.status='break';
+  setTimeout(()=>{if(!w.fired&&!w.onLeave)startNewPalette(w);},rnd(180000,420000));
+  renderDockWaiting();
+}
+
+function startNewPalette(w){
+  w.status='picking';
+  w.rate=w.baseRate*(0.85+Math.random()*.3);
+  const total=rnd(12,36);
+  w.progress={done:0,total};
+  w.scanned=0;
+  w.palette='PAL-'+hex(4);
+  w.paletteType=pick(PAL_TYPES);
+  w.orderList=makeWorkerOL(0,total);
+  w.allée=pick(ALLEES);w.zone=w.allée[0];
+  w.étagère=pick(ETAGERES);w.rack=pick(RACKS);
+}
+
+function generateWorkerRequest(){
+  const types=[
+    {t:'req',ico:'🏖',title:'Demande de congé',msg:`${w.name} demande ${rnd(3,14)} jours de congé.`,action:['Accepter','Refuser']},
+    {t:'req',ico:'💰',title:"Demande d'augmentation",msg:`${w.name} (${w.seniority}m ancienneté) demande une revalorisation salariale de +${rnd(5,15)}%.`,action:['Accepter','Négocier','Refuser']},
+    {t:'info',ico:'🤒',title:'Arrêt maladie',msg:`${w.name} dépose un arrêt maladie de ${rnd(1,5)} jours.`,action:['Prendre en compte']},
+    {t:'req',ico:'🔧',title:'Réclamation conditions',msg:`${w.name} signale un problème: ${pick(['scanner défaillant','chaussures de sécurité usées','problème ventilation allée '+w.allée,'conflit avec collègue','cadence trop élevée','douleur musculaire'])}`,action:['Traiter','Ignorer']},
+    {t:'info',ico:'🎉',title:'Bonne performance',msg:`${w.name} a atteint ${w.rate.toFixed(0)} col/h — record personnel!`,action:['Féliciter (+moral)']},
+  ];
+  const req=pick(types);
+  addNotif(req.t,req.ico+' '+req.title,req.msg,'worker',w.id,req.action);
+}
+
+function renderDocks(){
+  const dg=document.getElementById('dock-grid');
+  dg.innerHTML=G.docks.map(d=>{
+    const pct=d.palettes.length/d.maxPalettes*100;
+    return`<div class="dock ${d.palettes.length>0?'occupied':''}">
+<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:5px;">
+  <div class="dock-id">${d.id}</div>
+  <div style="font-size:9px;color:var(--tx3)">${d.palettes.length}/${d.maxPalettes} pal.</div>
+</div>
+<div class="dock-truck">${d.truck}</div>
+<div class="dock-carrier">${d.carrier}</div>
+<div style="height:4px;background:var(--sf3);border-radius:2px;overflow:hidden;margin:6px 0;">
+  <div style="height:100%;background:${pct>80?'var(--rd)':pct>50?'var(--ye)':'var(--gn)'};width:${pct}%;border-radius:2px;transition:width .5s"></div>
+</div>
+<div style="font-size:9px;color:var(--tx3);margin-bottom:6px">Départ: J${d.departureDay} ${String(d.departureHour).padStart(2,'0')}h${d.palettes.length>=d.maxPalettes?' (PLEIN)':''}</div>
+${d.blocked?'<div style="font-size:9px;color:var(--rd);font-weight:700;">🚛 BLOQUÉ</div>':''}
+${d.palettes.slice(-3).map(p=>`<div style="background:var(--sf3);border-radius:3px;padding:3px 6px;font-size:10px;margin-bottom:2px;display:flex;justify-content:space-between;"><span style="font-family:'JetBrains Mono',monospace;color:var(--bl)">${p.id}</span><span style="color:var(--gn)">${p.revenue}€</span></div>`).join('')}
+</div>`;
+  }).join('');
+  document.getElementById('pals-waiting').textContent=G.waitingPalettes.length;
+  document.getElementById('pals-shipped').textContent=G.todayPalettes;
+  document.getElementById('today-revenue').textContent=fmt(G.todayRevenue);
+}
+function renderDocksAuto(){
+  const dg=document.getElementById('dock-grid');
+  if(dg) {
+    G.docks.forEach(d=>{
+      const pct=d.palettes.length/d.maxPalettes*100;
+    });
+  }
+  document.getElementById('pals-waiting').textContent=G.waitingPalettes.length;
+  document.getElementById('pals-shipped').textContent=G.todayPalettes;
+  document.getElementById('today-revenue').textContent=fmt(G.todayRevenue);
+}
+
+function renderDockWaiting(){
+  const el=document.getElementById('palettes-waiting-list');
+  if(!el)return;
+  const dockOpts = G.docks.filter(d=>d.palettes.length<d.maxPalettes)
+    .map(d=>`<option value="${d.id}">${d.id} — ${d.carrier} (${d.palettes.length}/${d.maxPalettes})</option>`).join('');
+  el.innerHTML=G.waitingPalettes.map(p=>`
+<div style="background:rgba(56,139,253,.08);border:1px solid var(--bl);border-radius:4px;padding:6px 9px;display:flex;align-items:center;gap:8px;">
+  <div style="flex:1">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--bl)">${p.id}</div>
+    <div style="font-size:10px;color:var(--tx3)">${p.type} · ${p.items} art.</div>
+    <div style="font-size:10px;color:var(--tx2)">${p.worker}</div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:var(--gn);min-width:40px;text-align:right">${p.revenue}€</div>
+  <select id="sel-${p.id}" style="background:var(--sf2);border:1px solid var(--bl);border-radius:3px;color:var(--bl);font-size:11px;padding:3px 5px;cursor:pointer;outline:none;max-width:160px;">
+    <option value="">→ Quai...</option>
+    ${dockOpts}
+  </select>
+  <button onclick="assignFromSelect('${p.id}')" style="background:var(--gnd);border:1px solid var(--gn);border-radius:3px;padding:4px 9px;color:var(--gn);font-size:11px;cursor:pointer;white-space:nowrap;">✓ OK</button>
+</div>`).join('');
+  const bulk=document.getElementById('bulk-dock-select');
+  if(bulk){
+    bulk.innerHTML='<option value="">Assigner tout → Quai...</option>'+dockOpts;
+  }
+}
+function assignFromSelect(palId){
+  const sel=document.getElementById('sel-'+palId);
+  if(!sel||!sel.value){return;}
+  assignToDock(palId,sel.value);
+}
+function updateBulkSelect(){}
+function bulkAssign(){
+  const sel=document.getElementById('bulk-dock-select');
+  if(!sel||!sel.value){addTicker('warn','⚠','Choisissez un quai pour l\'assignation groupée');return;}
+  const dockId=sel.value;
+  const pals=[...G.waitingPalettes];
+  let assigned=0;
+  for(const p of pals){
+    const dock=G.docks.find(d=>d.id===dockId);
+    if(!dock||dock.palettes.length>=dock.maxPalettes)break;
+    assignToDock(p.id,dockId);
+    assigned++;
+  }
+  addTicker('good','⚡',`${assigned} palette(s) assignée(s) au ${dockId}`);
+}
+
+let assigningPalId=null;
+function openAssignDock(){
+  assigningPalId=palId;
+  const pal=G.waitingPalettes.find(p=>p.id===palId);
+  if(!pal)return;
+  const dockOptions=G.docks.map(d=>`
+<div class="dock-pal-item" onclick="assignToDock('${palId}','${d.id}')">
+  <div class="pi-ref">${d.id}</div>
+  <div style="flex:1"><div class="pi-meta">${d.truck} — ${d.carrier}</div>
+  <div style="font-size:10px;color:var(--tx3)">${d.palettes.length}/${d.maxPalettes} · Départ ${String(d.departureGameHour).padStart(2,'0')}h</div></div>
+  <div style="font-size:11px;color:var(--gn);font-weight:600">${pal.revenue}€</div>
+</div>`).join('');
+  document.getElementById('pm-worker').textContent=`${pal.id} (${pal.worker}) → choisir quai`;
+  document.getElementById('pm-list').innerHTML=dockOptions;
+  document.getElementById('pal-modal').classList.add('show');
+}
+function quickAssignDock(){
+  if(!dockId)return;
+  assignToDock(palId,dockId);
+}
+function assignToDock(palId, dockId){
+  const pal=G.waitingPalettes.find(p=>p.id===palId);
+  const dock=G.docks.find(d=>d.id===dockId);
+  if(!pal||!dock){closePalModal();return;}
+  if(dock.blocked){addTicker('warn','🚛',`Quai ${dockId} bloqué par la grève!`);return;}
+  if(dock.palettes.length>=dock.maxPalettes){addTicker('warn','⚠',`Quai ${dockId} complet!`);return;}
+  dock.palettes.push(pal);
+  G.waitingPalettes=G.waitingPalettes.filter(p=>p.id!==palId);
+  addTicker('info','📦',`${pal.id} → ${dockId} — chargement`);
+  closePalModal();
+  renderDocks();
+  setTimeout(renderDockWaiting, 50);
+}
+function closePalModal(){document.getElementById('pal-modal').classList.remove('show');}
+
+function doAssignPal(){
+  const w=G.workers.find(x=>x.id===G.selWorkerId);
+  if(!w)return;
+  document.getElementById('pm-worker').textContent=w.name;
+  const total=rnd(12,32);
+  document.getElementById('pm-list').innerHTML=`
+<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Générer une nouvelle palette assignée à ${w.name}:</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;">
+${PAL_TYPES.map(t=>`<div class="pal-item" style="flex:0 0 auto;width:calc(50% - 4px);" onclick="assignWorkerPal('${w.id}','${t}')">
+  <div><div class="pi-ref">${t}</div><div class="pi-meta">${rnd(12,32)} articles estimés</div></div>
+</div>`).join('')}
+</div>`;
+  document.getElementById('pal-modal').classList.add('show');
+}
+function assignWorkerPal(wid,type){
+  const w=G.workers.find(x=>x.id===wid);
+  if(!w){closePalModal();return;}
+  const total=rnd(12,32);
+  w.palette='PAL-'+hex(4);
+  w.paletteType=type;
+  w.orderList=makeWorkerOL(0,total);
+  w.progress={done:0,total};
+  w.scanned=0;
+  if(w.status==='break'||w.status==='idle') w.status='picking';
+  addTicker('good','📦',`Palette ${type} assignée à ${w.name}`);
+  closePalModal();
+}
+
+let srtSK='ref',srtSD=1;
+function fStock(f,el){
+  G.stockFilter=f;
+  document.querySelectorAll('#tc-stock .fbar .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');renderStock();
+}
+function srtS(k){if(srtSK===k)srtSD*=-1;else{srtSK=k;srtSD=1;}renderStock();}
+function srtStockByLevel(){
+  G.stockFilter='all';
+  document.querySelectorAll('#tc-stock .fbar .chip').forEach(c=>c.classList.remove('active'));
+  srtSK='level'; srtSD=dir;
+  renderStock();
+}
+function orderAllCrit(){
+  const crits=G.stocks.filter(s=>s.level==='crit'&&s.pendingQty===0);
+  crits.forEach(s=>orderStock(s.ref,s.maxStock-s.stock));
+  addTicker('info','🛒',`Réassort groupé: ${crits.length} références commandées`);
+}
+function orderStock(ref,qty){
+  const s=G.stocks.find(x=>x.ref===ref);
+  if(!s||qty<=0)return;
+  const cost=s.price*qty;
+  if(cost>G.budget){addTicker('warn','💰',`Budget insuffisant: ${fmt(cost)} requis`);return;}
+  G.budget-=cost;
+  G.finances.stockCost+=cost;
+  s.pendingQty=qty;
+  s.pendingArrival=qty;
+  const arrivalDay=G.day+rnd(1,3);
+  addTicker('info','🛒',`Commande ${s.name}: ${qty}u (${fmt(cost)}) — livraison J${arrivalDay}`);
+  addNotif('info','🛒 Commande passée',`${s.name} — ${qty} unités (${fmt(cost)}) — livraison estimée J${arrivalDay}`,'finance');
+  setTimeout(()=>{
+    s.stock=Math.min(s.maxStock,s.stock+qty);
+    s.pendingQty=0;s.pendingArrival=0;
+    s.level=s.stock<s.threshold?(s.stock<s.threshold*.3?'crit':'low'):'ok';
+    addTicker('good','📦',`Livraison reçue: ${s.name} (+${qty}u)`);
+    renderStock();
+  },rnd(30000,90000));
+  renderStock();
+}
+function renderStock(){
+  const q=(document.getElementById('stocksearch')?.value||'').toLowerCase();
+  const list=G.stocks.filter(s=>{
+    if(G.stockFilter!=='all'&&s.level!==G.stockFilter)return false;
+    if(q&&!s.name.toLowerCase().includes(q)&&!s.ref.toLowerCase().includes(q))return false;
+    return true;
+  }).sort((a,b)=>{
+    if(srtSK==='level'){
+      const order={crit:0,low:1,ok:2};
+      return (order[a.level]-order[b.level])*srtSD;
+    }
+    let va=a[srtSK]||0,vb=b[srtSK]||0;
+    if(srtSK==='name'||srtSK==='ref'||srtSK==='cat'){va=a[srtSK];vb=b[srtSK];}
+    if(va<vb)return -srtSD;if(va>vb)return srtSD;return 0;
+  });
+  const crit=G.stocks.filter(s=>s.level==='crit').length;
+  const low=G.stocks.filter(s=>s.level==='low').length;
+  document.getElementById('tb-stock').textContent=crit+low>0?(crit+low)+' ⚠':'-';
+  document.getElementById('stockcnt').textContent=list.length+' refs';
+  document.getElementById('stbody').innerHTML=list.map(s=>{
+    const pct=s.maxStock>0?s.stock/s.maxStock*100:0;
+    const col=s.level==='crit'?'var(--rd)':s.level==='low'?'var(--ye)':'var(--gn)';
+    return`<tr>
+<td class="cid">${s.ref}</td>
+<td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis">${s.name}</td>
+<td><span style="background:var(--sf3);border-radius:3px;padding:1px 4px;font-size:9px">${s.cat}</span></td>
+<td><div class="sl"><div class="slb"><div class="slf" style="width:${pct}%;background:${col}"></div></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;min-width:36px;text-align:right;color:${col}">${s.stock}</span></div></td>
+<td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx3)">${s.threshold}</td>
+<td><span class="rbadge ${s.level}">${{crit:'🔴 CRIT',low:'🟡 BAS',ok:'🟢 OK'}[s.level]}</span></td>
+<td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:${s.pendingQty>0?'var(--ye)':'var(--tx3)'}">${s.pendingQty>0?'+'+s.pendingQty:'—'}</td>
+<td>
+  <div style="display:flex;gap:4px;align-items:center;">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cy)">${fmt(s.price)}</span>
+    <input type="number" id="qty-${s.ref}" value="100" min="1" max="${s.maxStock}" style="width:55px;background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:2px 5px;color:var(--tx);font-size:10px;font-family:'JetBrains Mono',monospace;outline:none;">
+    <button class="obtn ${s.pendingQty>0?'pend':''}" onclick="orderStock('${s.ref}',parseInt(document.getElementById('qty-${s.ref}').value)||100)">${s.pendingQty>0?'⏳ En cours':'🛒'}</button>
+  </div>
+</td>
+</tr>`;
+  }).join('');
+}
+
+let marketFilter='all';
+function fMarket(f,el){
+  G.marketFilter=f;
+  document.querySelectorAll('#tc-market .fbar .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');renderMarket();
+}
+function renderMarket(){
+  const q=(document.getElementById('marketsearch')?.value||'').toLowerCase();
+  const list=PRODUCT_DATA.filter(p=>{
+    if(G.marketFilter!=='all'&&p.cat!==G.marketFilter)return false;
+    if(q&&!p.n.toLowerCase().includes(q)&&!p.ref.toLowerCase().includes(q))return false;
+    return true;
+  }).slice(0,200);
+  document.getElementById('market-grid').innerHTML=list.map(p=>{
+    const price=G.marketPrices[p.ref]||p.basePrice;
+    const baseRef=p.basePrice;
+    const chg=((price-baseRef)/baseRef*100).toFixed(1);
+    const s=G.stocks.find(x=>x.ref===p.ref);
+    return`<div class="mprod">
+<div class="mp-ref">${p.ref}</div>
+<div class="mp-name">${p.n}</div>
+<div class="mp-cat">${p.cat}</div>
+<div class="mp-price" style="color:${parseFloat(chg)>5?'var(--rd)':parseFloat(chg)<-5?'var(--gn)':'var(--tx)'}">${fmt(price)}</div>
+<div class="mp-change ${parseFloat(chg)>=0?'up':'dn'}">${parseFloat(chg)>=0?'+':''}${chg}% vs base</div>
+<div style="font-size:10px;color:var(--tx3);margin:4px 0">Stock actuel: ${s?s.stock:'?'} / ${s?s.maxStock:'?'}</div>
+<div class="mp-order-row">
+  <input type="number" class="qty-input" id="mq-${p.ref}" value="100" min="1">
+  <button class="btn primary" style="font-size:10px;padding:4px 8px;" onclick="buyMarket('${p.ref}',parseInt(document.getElementById('mq-${p.ref}').value)||100)">Acheter</button>
+  <span style="font-size:10px;color:var(--tx3)">Coût: <span id="mc-${p.ref}" style="color:var(--ye);font-family:'JetBrains Mono',monospace">${fmt(price*100)}</span></span>
+</div>
+</div>`;
+  }).join('');
+  list.forEach(p=>{
+    const qi=document.getElementById('mq-'+p.ref);
+    const ci=document.getElementById('mc-'+p.ref);
+    if(qi&&ci){
+      qi.addEventListener('input',()=>{ci.textContent=fmt((G.marketPrices[p.ref]||p.basePrice)*parseInt(qi.value||0));});
+    }
+  });
+}
+function buyMarket(ref,qty){
+  const p=PRODUCT_DATA.find(x=>x.ref===ref);
+  const s=G.stocks.find(x=>x.ref===ref);
+  if(!p||!s||qty<=0)return;
+  const price=G.marketPrices[ref]||p.basePrice;
+  const cost=price*qty;
+  if(cost>G.budget){addTicker('warn','💰',`Budget insuffisant: besoin ${fmt(cost)}`);return;}
+  G.budget-=cost;
+  G.finances.stockCost+=cost;
+  s.stock=Math.min(s.maxStock*2,s.stock+qty);
+  s.level=s.stock<s.threshold?(s.stock<s.threshold*.3?'crit':'low'):'ok';
+  addTicker('good','🛒',`Acheté: ${qty}× ${p.n} — ${fmt(cost)}`);
+  renderMarket();renderStock();
+}
+
+let hrF='all';
+function fHR(f,el){hrF=f;document.querySelectorAll('[id^="hrf-"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');renderHR();}
+
+const INTERVIEW_Qs = [
+  "Parlez-moi de votre expérience en logistique.",
+  "Comment gérez-vous la pression et les cadences élevées?",
+  "Êtes-vous disponible sur tous les créneaux, y compris la nuit?",
+  "Comment réagissez-vous face à une erreur de scan?",
+  "Quelles sont vos attentes salariales?",
+  "Avez-vous le CACES ou êtes-vous prêt à le passer?",
+  "Comment vous décrieriez votre rapport au travail en équipe?",
+];
+
+let candidatePool = [];
+function openHireModal(){
+  candidatePool = Array.from({length:3},()=>{
+    const nm=genName(Math.random()<.55?'M':'F');
+    const motivation=rnd(35,99),reliability=rnd(30,99),aptitude=rnd(30,99);
+    const seniority=rnd(0,96);
+    const demandedSalary=parseFloat(((1180+seniority*8+aptitude*3)/160).toFixed(2));
+    const answers=INTERVIEW_Qs.map(q=>{
+      const pool=[...MOTIV_PHRASES,...TEMP_PHRASES,...SKILL_PHRASES];
+      return pick(pool);
+    });
+    return {nm,motivation,reliability,aptitude,seniority,demandedSalary,answers,offeredSalary:demandedSalary*0.95};
+  });
+  showInterviewModal(0);
+}
+
+let currentCandIdx=0;
+function showInterviewModal(idx){
+  currentCandIdx=idx;
+  const c=candidatePool[idx];
+  const nm=c.nm.first+' '+c.nm.last;
+  document.getElementById('im-title').textContent=`Entretien — ${nm} (${idx+1}/${candidatePool.length})`;
+  document.getElementById('im-content').innerHTML=`
+<div class="cand-info">
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:8px">${nm}</div>
+  <div class="cand-stat"><span class="cand-stat-l">Motivation</span><div class="cand-stat-bar"><div class="cand-stat-fill" style="width:${c.motivation}%;background:${c.motivation>70?'var(--gn)':c.motivation>50?'var(--ye)':'var(--rd)'}"></div></div><span class="cand-stat-v">${c.motivation}%</span></div>
+  <div class="cand-stat"><span class="cand-stat-l">Fiabilité</span><div class="cand-stat-bar"><div class="cand-stat-fill" style="width:${c.reliability}%;background:${c.reliability>70?'var(--gn)':c.reliability>50?'var(--ye)':'var(--rd)'}"></div></div><span class="cand-stat-v">${c.reliability}%</span></div>
+  <div class="cand-stat"><span class="cand-stat-l">Aptitude</span><div class="cand-stat-bar"><div class="cand-stat-fill" style="width:${c.aptitude}%;background:${c.aptitude>70?'var(--gn)':c.aptitude>50?'var(--ye)':'var(--rd)'}"></div></div><span class="cand-stat-v">${c.aptitude}%</span></div>
+  <div style="font-size:10px;color:var(--tx3);margin-top:6px">Ancienneté: ${c.seniority} mois · Salaire demandé: ${fmt(c.demandedSalary)}/h</div>
+</div>
+<div class="q-list">
+  ${INTERVIEW_Qs.slice(0,5).map((q,i)=>`<div class="q-item"><div class="q-text">Q${i+1}: ${q}</div><div class="q-answer">"${c.answers[i]}"</div></div>`).join('')}
+</div>
+<div class="salary-neg">
+  <div style="font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Négociation salariale</div>
+  <div class="sal-row">
+    <span class="sal-label">Demandé:</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ye)">${fmt(c.demandedSalary)}/h</span>
+  </div>
+  <div class="sal-row">
+    <span class="sal-label">Votre offre:</span>
+    <input class="sal-input" id="sal-offer" type="number" step="0.10" value="${c.offeredSalary.toFixed(2)}">
+    <span class="sal-label" style="font-size:10px;color:var(--tx3)">€/h brut → ${fmt((parseFloat(document.getElementById('sal-offer')||c.offeredSalary)*151.67))} brut/mois</span>
+  </div>
+</div>
+<div class="modal-actions">
+  <button class="btn primary" onclick="hireCandidate()">✅ Embaucher</button>
+  <button class="btn" onclick="showInterviewModal(${(idx+1)%candidatePool.length})">→ Candidat suivant</button>
+  <button class="btn" style="margin-left:auto" onclick="closeInterview()">✕ Terminer</button>
+</div>`;
+  document.getElementById('interview-modal').classList.add('show');
+  setTimeout(()=>{
+    const si=document.getElementById('sal-offer');
+    if(si) si.addEventListener('input',()=>{
+      const monthly=parseFloat(si.value||0)*151.67;
+      si.nextElementSibling&&(si.nextElementSibling.textContent=`€/h brut → ${fmt(monthly)} brut/mois`);
+    });
+  },100);
+}
+function closeInterview(){document.getElementById('interview-modal').classList.remove('show');}
+function hireCandidate(){
+  const c=candidatePool[currentCandIdx];
+  const salOffer=parseFloat(document.getElementById('sal-offer')?.value||c.demandedSalary);
+  if(salOffer<c.demandedSalary*0.75){
+    addTicker('warn','🤝',`${c.nm.first} refuse: offre trop basse`);return;
+  }
+  const newId=G.workers.length+1;
+  const nm=c.nm;
+  const w={
+    id:'WRK-'+String(newId).padStart(3,'0'),
+    name:nm.first+' '+nm.last, fn:nm.first, ln:nm.last, gender:nm.gender,
+    color:['#388bfd','#3fb950','#d29922','#f85149','#a371f7','#39d8c8','#e07b33'][newId%7],
+    team:TEAMS[rnd(0,2)], shiftIdx:rnd(0,2),
+    status:'break', zone:'A', allée:pick(ALLEES),
+    étagère:pick(ETAGERES), rack:pick(RACKS),
+    rate:0, baseRate:Math.round(40+c.aptitude*.6),
+    errors:0, scanned:0, salary:salOffer,
+    progress:{done:0,total:rnd(12,30)},
+    palette:'PAL-'+hex(4), paletteType:pick(PAL_TYPES),
+    orderList:makeWorkerOL(0,20), palettesFinished:0,
+    shiftStart:String(rnd(5,9)).padStart(2,'0')+':'+String(rnd(0,59)).padStart(2,'0'), voiceActive:false, voiceMsg:'—',
+    warnings:[], fired:false, onLeave:false,
+    requests:[], lastUpdate:new Date(),
+    motivation:c.motivation, reliability:c.reliability,
+    seniority:c.seniority, hrNote:'',
+    hireDate:new Date(),
+  };
+  G.workers.push(w);
+  setTimeout(()=>startNewPalette(w),5000);
+  addTicker('good','✅',`${w.name} embauché(e) à ${fmt(salOffer)}/h`);
+  addNotif('info','✅ Nouvelle embauche',`${w.name} rejoint l\'équipe — ${fmt(salOffer)}/h brut`,'hr');
+  closeInterview();renderHR();renderTable();
+}
+
+function renderHR(){
+  const q=(document.getElementById('hr-search')?.value||'').toLowerCase();
+  const list=G.workers.filter(w=>{
+    if(hrF==='fired'&&!w.fired)return false;
+    if(hrF==='warn'&&w.warnings.length===0)return false;
+    if(hrF==='good'&&(w.fired||w.warnings.length>0||w.onLeave))return false;
+    if(hrF==='congé'&&!w.onLeave)return false;
+    if(q&&!w.name.toLowerCase().includes(q)&&!w.id.toLowerCase().includes(q))return false;
+    return true;
+  });
+  document.getElementById('tb-hr').textContent=G.workers.filter(w=>w.fired||w.warnings.length>0).length||'—';
+  document.getElementById('hr-list').innerHTML=list.map(w=>`
+<div class="hr-item ${w.fired?'fired':''}">
+  <div class="av" style="background:${w.color}22;color:${w.color};border:1px solid ${w.color}44">${w.fn[0]}${w.ln[0]}</div>
+  <div class="hr-info">
+    <div class="hr-name">${w.name} <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx3)">${w.id}</span></div>
+    <div class="hr-meta">${w.team} · Zone ${w.zone} · ${w.rate>0?w.rate.toFixed(0)+' col/h':'—'} · Salaire: ${fmt(w.salary)}/h · Ancienneté: ${w.seniority}m</div>
+    <div class="hr-badges">
+      ${w.fired?'<span class="hbg fire">🚫 Licencié</span>':''}
+      ${w.onLeave?'<span class="hbg req">🏖 En congé</span>':''}
+      ${w.warnings.map(x=>`<span class="hbg warn">⚠ ${x.substring(0,20)}</span>`).join('')}
+      ${!w.fired&&!w.onLeave&&w.warnings.length===0&&w.rate>=90?'<span class="hbg good">✅ Excellent</span>':''}
+    </div>
+    <div class="hacts">
+      ${!w.fired?`
+        <button class="hbtn w" onclick="hwarn('${w.id}')">⚠ Avertir</button>
+        <button class="hbtn f" onclick="hfire('${w.id}')">🚫 Licencier</button>
+        <button class="hbtn" onclick="hleave('${w.id}')">🏖 Congé</button>
+        <button class="hbtn" onclick="hbonus('${w.id}')">💰 Prime</button>
+      `:`<button class="hbtn g" onclick="hrestore('${w.id}')">↩ Réintégrer</button>`}
+    </div>
+  </div>
+</div>`).join('');
+}
+function hwarn(id){const w=G.workers.find(x=>x.id===id);if(!w)return;const r=pick(['Productivité insuffisante','Retard répété','Non-respect consignes','Absence injustifiée']);w.warnings.push(r);addTicker('warn','⚠',`Avertissement: ${w.name} — ${r}`);renderHR();}
+function hfire(id){
+  const w=G.workers.find(x=>x.id===id);
+  if(!w||!confirm(`Licencier ${w.name}?
+Indemnité légale: ${fmt(w.salary*w.seniority*4)}`))return;
+  const indem=w.salary*w.seniority*4;
+  G.budget-=indem;
+  G.finances.salaryPaid+=indem;
+  w.fired=true;w.status='fired';
+  addTicker('warn','🚫',`${w.name} licencié — indemnité: ${fmt(indem)}`);
+  renderHR();renderTable();
+}
+function hrestore(id){const w=G.workers.find(x=>x.id===id);if(!w)return;w.fired=false;w.warnings=[];w.status='idle';setTimeout(()=>startNewPalette(w),3000);addTicker('good','↩',`${w.name} réintégré`);renderHR();}
+function hleave(id){const w=G.workers.find(x=>x.id===id);if(!w)return;w.onLeave=!w.onLeave;w.status=w.onLeave?'break':'idle';addTicker('info','🏖',`${w.name}: congé ${w.onLeave?'accordé':'terminé'}`);renderHR();}
+function hbonus(id){const w=G.workers.find(x=>x.id===id);if(!w)return;const b=rnd(100,500);G.budget-=b;G.finances.salaryPaid+=b;addTicker('good','💰',`Prime ${fmt(b)} versée à ${w.name}`);renderHR();}
+
+let rankMode='rate';
+function setRankM(m){rankMode=m;document.querySelectorAll('[id^="rm-"]').forEach(b=>b.style.background='');document.getElementById('rm-'+m).style.background='var(--bld)';renderRanking();}
+function renderRanking(){
+  const ws=G.workers.filter(w=>!w.fired).slice().sort((a,b)=>{
+    if(rankMode==='rate')return b.rate-a.rate;
+    if(rankMode==='errors')return(a.scanned>0?a.errors/a.scanned:0)-(b.scanned>0?b.errors/b.scanned:0);
+    if(rankMode==='palettes')return b.palettesFinished-a.palettesFinished;
+    if(rankMode==='salary')return a.salary-b.salary;
+    return 0;
+  });
+  const medals=['🥇','🥈','🥉'];
+  const maxV=ws.length>0?(rankMode==='rate'?ws[0].rate:rankMode==='palettes'?ws[0].palettesFinished:rankMode==='salary'?ws[0].salary:1):1;
+  document.getElementById('rank-tbody').innerHTML=ws.slice(0,80).map((w,i)=>{
+    let v,vs,col;
+    if(rankMode==='rate'){v=w.rate;vs=w.rate.toFixed(0)+' c/h';col=w.rate>=90?'var(--gn)':w.rate>=70?'var(--ye)':'var(--or)';}
+    else if(rankMode==='errors'){v=w.scanned>0?100-w.errors/w.scanned*100:100;vs=w.scanned>0?(w.errors/w.scanned*100).toFixed(1)+'%':'-';col=w.errors===0?'var(--gn)':w.errors<=2?'var(--ye)':'var(--rd)';}
+    else if(rankMode==='palettes'){v=w.palettesFinished;vs=v+' pal.';col='var(--cy)';}
+    else{v=100-w.salary/5*100;vs=fmt(w.salary)+'/h';col='var(--pu)';}
+    const pct=maxV>0?Math.min(100,Math.abs(v)/maxV*100):0;
+    return`<tr onclick="selW('${w.id}')" style="cursor:pointer">
+<td style="text-align:center;font-size:15px">${medals[i]||'#'+(i+1)}</td>
+<td style="font-weight:500">${w.name}</td>
+<td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${col}">${vs}</span></td>
+<td><div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:5px;background:var(--sf3);border-radius:2px;max-width:100px;overflow:hidden"><div style="height:100%;background:${col};width:${pct}%"></div></div></div></td>
+<td><span style="background:var(--sf3);border-radius:3px;padding:1px 4px;font-size:10px">${w.team.split('(')[0].trim()}</span></td>
+<td><span class="sb ${w.status}"><span class="sbd"></span>${{picking:'Picking',idle:'Inactif',break:'Pause',alert:'ALERTE'}[w.status]||w.status}</span></td>
+</tr>`;
+  }).join('');
+}
+
+function renderStats(){
+  const active=G.workers.filter(w=>!w.fired&&w.status==='picking');
+  const avgR=active.length>0?active.reduce((s,w)=>s+w.rate,0)/active.length:0;
+  const totPal=G.workers.reduce((s,w)=>s+w.palettesFinished,0);
+  const totErr=G.workers.reduce((s,w)=>s+w.errors,0);
+  const totScan=G.workers.reduce((s,w)=>s+w.scanned,0);
+  const stockVal=G.stocks.reduce((s,x)=>s+x.stock*x.price,0);
+  const byZ=['A','B','C','D','E'].map(z=>({z,w:active.filter(x=>x.zone===z).length,avg:active.filter(x=>x.zone===z).reduce((s,x)=>s+x.rate,0)/(active.filter(x=>x.zone===z).length||1)}));
+  document.getElementById('stats-inner').innerHTML=`
+<div class="stat-cards" style="margin-bottom:14px">
+  <div class="sc"><div class="sc-l">Budget actuel</div><div class="sc-v" style="color:${G.budget>G.startBudget*0.3?'var(--gn)':'var(--rd)'}">${fmtK(G.budget)}</div><div class="sc-s">solde disponible</div></div>
+  <div class="sc"><div class="sc-l">Revenu total</div><div class="sc-v" style="color:var(--bl)">${fmtK(G.totalRevenue)}</div><div class="sc-s">palettes livrées</div></div>
+  <div class="sc"><div class="sc-l">Charges totales</div><div class="sc-v" style="color:var(--rd)">${fmtK(G.finances.salaryPaid+G.finances.stockCost)}</div><div class="sc-s">salaires + stock</div></div>
+  <div class="sc"><div class="sc-l">Prod. moyenne</div><div class="sc-v" style="color:var(--bl)">${avgR.toFixed(0)}</div><div class="sc-s">col/h actif</div></div>
+  <div class="sc"><div class="sc-l">Palettes J${G.day}</div><div class="sc-v" style="color:var(--cy)">${G.todayPalettes}</div><div class="sc-s">finalisées</div></div>
+  <div class="sc"><div class="sc-l">Valeur stock</div><div class="sc-v">${fmtK(stockVal)}</div><div class="sc-s">inventaire</div></div>
+  <div class="sc"><div class="sc-l">Effectif actif</div><div class="sc-v" style="color:var(--gn)">${active.length}</div><div class="sc-s">sur ${G.workers.filter(w=>!w.fired).length}</div></div>
+  <div class="sc"><div class="sc-l">Taux erreur</div><div class="sc-v" style="color:${totScan>0&&totErr/totScan<.03?'var(--gn)':'var(--ye)'}">${totScan>0?(totErr/totScan*100).toFixed(2):0}%</div><div class="sc-s">scans KO</div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<div>
+  <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Prod. par zone</div>
+  <div class="hbars">${byZ.map(z=>`<div class="hbrow"><span class="hblabel">Zone ${z.z} (${z.w}p)</span><div class="hbtrack"><div class="hbfill" style="width:${z.avg/145*100}%;background:${z.avg>=90?'var(--gn)':z.avg>=70?'var(--bl)':'var(--ye)'}">${z.avg.toFixed(0)} c/h</div></div><span class="hbval">${z.avg.toFixed(0)}</span></div>`).join('')}</div>
+</div>
+<div>
+  <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Distribution vitesse</div>
+  <div class="hbars">${[['<40',0,40],['40-70',40,70],['70-90',70,90],['90-110',90,110],['110+',110,200]].map(([l,lo,hi])=>{
+    const cnt=active.filter(w=>w.rate>=lo&&w.rate<hi).length;
+    const col=lo>=90?'var(--gn)':lo>=70?'var(--bl)':lo>=40?'var(--ye)':'var(--rd)';
+    return`<div class="hbrow"><span class="hblabel">${l} c/h</span><div class="hbtrack"><div class="hbfill" style="width:${active.length>0?cnt/active.length*100:0}%;background:${col}">${cnt}</div></div><span class="hbval">${cnt}</span></div>`;
+  }).join('')}</div>
+</div>
+</div>`;
+}
+
+function renderFinance(){
+  const monthSal=G.workers.filter(w=>!w.fired).reduce((s,w)=>s+w.salary*151.67,0);
+  const charges=monthSal*0.42;
+  const stockVal=G.stocks.reduce((s,x)=>s+x.stock*x.price,0);
+  document.getElementById('finance-inner').innerHTML=`
+<div class="fin-grid">
+  <div class="fin-card">
+    <div class="fin-title">Compte de résultat — J${G.day}</div>
+    <div class="fin-row"><span>Revenu palettes</span><span class="fv pos">+${fmt(G.totalRevenue)}</span></div>
+    <div class="fin-row"><span>Masse salariale versée</span><span class="fv neg">-${fmt(G.finances.salaryPaid)}</span></div>
+    <div class="fin-row"><span>Achats stock</span><span class="fv neg">-${fmt(G.finances.stockCost)}</span></div>
+    <div class="fin-total"><span>Résultat</span><span style="font-family:'JetBrains Mono',monospace;color:${G.totalRevenue-G.finances.salaryPaid-G.finances.stockCost>=0?'var(--gn)':'var(--rd)'}">${fmt(G.totalRevenue-G.finances.salaryPaid-G.finances.stockCost)}</span></div>
+  </div>
+  <div class="fin-card">
+    <div class="fin-title">Masse salariale mensuelle (estimée)</div>
+    <div class="fin-row"><span>Effectif</span><span class="fv">${G.workers.filter(w=>!w.fired).length}</span></div>
+    <div class="fin-row"><span>Salaires bruts</span><span class="fv neg">${fmt(monthSal)}</span></div>
+    <div class="fin-row"><span>Charges patronales (42%)</span><span class="fv neg">${fmt(charges)}</span></div>
+    <div class="fin-total"><span>Coût total mensuel</span><span style="font-family:'JetBrains Mono',monospace;color:var(--rd)">${fmt(monthSal+charges)}</span></div>
+  </div>
+  <div class="fin-card">
+    <div class="fin-title">Trésorerie</div>
+    <div class="fin-row"><span>Budget initial</span><span class="fv">${fmt(G.startBudget)}</span></div>
+    <div class="fin-row"><span>Budget actuel</span><span class="fv ${G.budget>=G.startBudget*0.5?'pos':'neg'}">${fmt(G.budget)}</span></div>
+    <div class="fin-row"><span>Valeur stock</span><span class="fv">${fmt(stockVal)}</span></div>
+    <div class="fin-total"><span>Patrimoine total</span><span style="font-family:'JetBrains Mono',monospace;color:var(--bl)">${fmt(G.budget+stockVal)}</span></div>
+  </div>
+  <div class="fin-card">
+    <div class="fin-title">Ratios de performance</div>
+    <div class="fin-row"><span>Rev./palette</span><span class="fv">${fmt(G.revenuePerPalette)}</span></div>
+    <div class="fin-row"><span>Palettes totales</span><span class="fv b">${G.totalPalettes}</span></div>
+    <div class="fin-row"><span>Coût/préparateur/j</span><span class="fv">${fmt(G.workers.filter(w=>!w.fired).length>0?(G.finances.salaryPaid/G.day/G.workers.filter(w=>!w.fired).length):0)}</span></div>
+    <div class="fin-total"><span>ROI</span><span style="font-family:'JetBrains Mono',monospace;color:${G.totalRevenue>G.finances.salaryPaid+G.finances.stockCost?'var(--gn)':'var(--rd)'}">${G.finances.salaryPaid+G.finances.stockCost>0?((G.totalRevenue/(G.finances.salaryPaid+G.finances.stockCost)-1)*100).toFixed(1)+'%':'—'}</span></div>
+  </div>
+</div>`;
+}
+
+let notifF='all';
+function fNotif(f,el){notifF=f;document.querySelectorAll('#tc-notifs .fbar .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderNotifs();}
+function addNotif(type,title,msg,cat,wid,actions){
+  G.notifications.unshift({id:'N'+Date.now(),type,title,msg,cat:cat||'system',wid,actions,time:new Date(),read:false});
+  if(G.notifications.length>100)G.notifications.pop();
+  document.getElementById('tb-notifs').textContent=G.notifications.filter(n=>!n.read).length||'—';
+  document.getElementById('k-notifs').textContent=G.notifications.filter(n=>!n.read).length;
+  if(activeTab==='notifs')renderNotifs();
+}
+function renderNotifs(){
+  const list=G.notifications.filter(n=>{
+    if(notifF==='req'&&n.type!=='req')return false;
+    if(notifF==='crit'&&n.type!=='crit')return false;
+    if(notifF==='info'&&n.type!=='info')return false;
+    return true;
+  });
+  const icons={req:'📋',crit:'🚨',info:'ℹ️'};
+  document.getElementById('notif-list').innerHTML=list.map(n=>`
+<div class="notif-item ${n.type}" style="opacity:${n.read?.6:1}">
+  <div class="notif-ico">${n.title.substring(0,2)}</div>
+  <div class="notif-body">
+    <div class="notif-title">${n.title}</div>
+    <div class="notif-msg">${n.msg}</div>
+    <div class="notif-time">${n.time.toLocaleTimeString('fr-FR')}</div>
+    ${n.actions?`<div class="notif-acts">${n.actions.map((a,ai)=>`<div class="na ${a==='Accepter'||a==='Traiter'||a==='Féliciter (+moral)'?'ok':a==='Refuser'||a==='Ignorer'?'no':''}" onclick="doNotifAction('${n.id}',${ai})">${a}</div>`).join('')}</div>`:''}
+  </div>
+</div>`).join('');
+}
+function doNotifAction(nid,ai){
+  const n=G.notifications.find(x=>x.id===nid);
+  if(!n||!n.actions||!n.actions[ai])return;
+  const action=n.actions[ai];
+  resolveNotif(nid,action);
+}
+function resolveNotif(nid,action){
+  const n=G.notifications.find(x=>x.id===nid);
+  if(!n)return;
+  n.read=true;
+  addTicker('info','📋',`${action}: ${n.title}`);
+  if(action==='Accepter'&&n.wid){
+    const w=G.workers.find(x=>x.id===n.wid);
+    if(w){w.onLeave=true;w.status='break';addTicker('good','🏖',`Congé accordé à ${w.name}`);}
+  }
+  if(action==='Refuser'&&n.wid){
+    addTicker('info','🚫','Demande refusée');
+  }
+  if(action==='Traiter'){
+    addTicker('good','✅','Réclamation prise en compte');
+  }
+  if(action==='Prendre en compte'){
+    addTicker('info','🤒','Arrêt maladie enregistré');
+    if(n.wid){const w=G.workers.find(x=>x.id===n.wid);if(w){w.status='break';w.onLeave=true;}}
+  }
+  if(action==='Négocier'&&n.wid){
+    addTicker('info','💰','Négociation en cours — répondez via onglet RH');
+  }
+  if(action==='Féliciter (+moral)'&&n.wid){
+    const w=G.workers.find(x=>x.id===n.wid);
+    if(w)w.baseRate=Math.min(140,w.baseRate+3);
+  }
+  renderNotifs();
+  document.getElementById('tb-notifs').textContent=G.notifications.filter(n=>!n.read).length||'—';
+}
+
+let wZ='all',wSt='all',wQ='',wSK='id',wSD=1;
+function fZ(z,el){wZ=z;el.closest('.fbar').querySelectorAll('.chip').forEach(c=>{if(['all','A','B','C','D','E'].includes(c.textContent.trim()))c.classList.remove('active');});el.classList.add('active');renderTable();}
+function fSt(s,el){wSt=s;el.closest('.fbar').querySelectorAll('.chip').forEach(c=>{if(['Tous','Picking','Alertes','Inactif','Pause'].includes(c.textContent.trim()))c.classList.remove('active');});el.classList.add('active');renderTable();}
+function wSearch(q){wQ=q;renderTable();}
+function srt(k){if(wSK===k)wSD*=-1;else{wSK=k;wSD=1;}renderTable();}
+
+function getFiltered(){
+  return G.workers.filter(w=>{
+    if(w.fired&&wSt!=='fired')return false;
+    if(wZ!=='all'&&w.zone!==wZ)return false;
+    if(wSt!=='all'&&w.status!==wSt)return false;
+    if(wQ){const q=wQ.toLowerCase();if(!w.name.toLowerCase().includes(q)&&!w.id.toLowerCase().includes(q)&&!w.allée.toLowerCase().includes(q))return false;}
+    return true;
+  }).sort((a,b)=>{
+    let va,vb;
+    if(wSK==='name'){va=a.name;vb=b.name;}
+    else if(wSK==='rate'){va=a.rate;vb=b.rate;}
+    else if(wSK==='errors'){va=a.errors;vb=b.errors;}
+    else if(wSK==='progress'){va=a.progress.done/a.progress.total;vb=b.progress.done/b.progress.total;}
+    else if(wSK==='salary'){va=a.salary;vb=b.salary;}
+    else{va=a.id;vb=b.id;}
+    if(va<vb)return -wSD;if(va>vb)return wSD;return 0;
+  });
+}
+
+function renderTable(){
+  const list=getFiltered();
+  document.getElementById('wcount').textContent=list.length+'p';
+  document.getElementById('tb-workers').textContent=G.workers.filter(w=>!w.fired).length;
+  document.getElementById('wtbody').innerHTML=list.map(w=>{
+    const rPct=Math.min(100,w.rate/90*100);
+    const rc=w.rate>=90?'var(--gn)':w.rate>=70?'var(--ye)':w.rate>=40?'var(--or)':'var(--rd)';
+    const prog=w.progress.done/w.progress.total*100;
+    return`<tr onclick="selW('${w.id}')" ${w.id===G.selWorkerId?'class="sel"':''}}>
+<td class="cid">${w.id}</td>
+<td class="cname">${w.name}<span style="background:var(--sf3);border-radius:2px;padding:0 3px;font-size:9px;color:var(--tx3);margin-left:3px">${w.team.split('(')[0].trim()}</span></td>
+<td><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#a371f7">${w.allée}</span> <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--cy)">${w.étagère}</span> <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--or)">${w.rack}</span></td>
+<td><span class="sb ${w.status}"><span class="sbd"></span>${{picking:'Picking',idle:'Inactif',break:'Pause',alert:'ALERTE',done:'OK',fired:'Licencié'}[w.status]||w.status}</span></td>
+<td><div class="pbar"><div class="pb"><div class="pf" style="width:${rPct}%;background:${rc}"></div></div><span class="pv" style="color:${rc}">${w.status==='picking'?w.rate.toFixed(0):'—'}</span></div></td>
+<td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:${w.errors===0?'var(--gn)':w.errors<=2?'var(--ye)':'var(--rd)'}">${w.errors}</td>
+<td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--pu)">${fmt(w.salary)}</td>
+<td><div class="prg"><div class="pt"><div class="pft" style="width:${prog}%"></div></div><span class="ptxt">${w.progress.done}/${w.progress.total}</span></div></td>
+<td style="text-align:center">${w.voiceActive?'<span style="color:var(--gn)">🎙</span>':'<span style="opacity:.2">🎙</span>'}</td>
+</tr>`;
+  }).join('');
+}
+
+function selW(id){
+  G.selWorkerId=id;
+  const w=G.workers.find(x=>x.id===id);
+  if(!w)return;
+  document.getElementById('dempty').style.display='none';
+  document.getElementById('dcontent').style.display='block';
+  document.getElementById('d-cards').style.display='block';
+  document.getElementById('d-actions').style.display='flex';
+  updDetail(w);renderTable();
+}
+function updDetail(w){
+  if(!w||!document.getElementById('d-cards'))return;
+  const rc=w.rate>=90?'var(--gn)':w.rate>=70?'var(--ye)':w.rate>=40?'var(--or)':'var(--rd)';
+  document.getElementById('d-name').textContent=w.name;
+  document.getElementById('d-id').textContent=`${w.id} · ${w.team}`;
+  document.getElementById('d-badges').innerHTML=`
+    <span class="sb ${w.status}"><span class="sbd"></span>${{picking:'Picking',idle:'Inactif',break:'Pause',alert:'ALERTE',fired:'Licencié'}[w.status]||w.status}</span>
+    <span class="sb" style="background:var(--sf3);color:var(--pu)">Zone ${w.zone}</span>
+    ${w.warnings.length>0?`<span class="sb" style="background:var(--yed);color:var(--ye)">⚠×${w.warnings.length}</span>`:''}`;
+  document.getElementById('dv-rate').textContent=w.status==='picking'?w.rate.toFixed(0):'—';
+  document.getElementById('dv-rate').style.color=rc;
+  document.getElementById('dv-sal').textContent=fmt(w.salary);
+  document.getElementById('dv-pal').textContent=w.palette;
+  document.getElementById('dv-paltype').textContent=w.paletteType;
+  document.getElementById('dv-prog').textContent=w.progress.done+'/'+w.progress.total;
+  document.getElementById('dv-al').textContent=w.allée;
+  document.getElementById('dv-et').textContent=w.étagère;
+  document.getElementById('dv-rk').textContent=w.rack;
+  document.getElementById('dv-zone').textContent='Zone '+w.zone;
+  document.getElementById('dv-upd').textContent=w.lastUpdate.toLocaleTimeString('fr-FR');
+  document.getElementById('dv-since').textContent=w.shiftStart;
+  document.getElementById('dv-err').textContent=w.errors;
+  document.getElementById('dv-err').style.color=w.errors===0?'var(--gn)':w.errors<=2?'var(--ye)':'var(--rd)';
+  document.getElementById('dv-done').textContent=w.palettesFinished;
+  const vw=document.getElementById('dv-vwave'),vm=document.getElementById('dv-vmsg');
+  if(w.voiceActive){vw.style.display='flex';vm.textContent=w.voiceMsg;}else{vw.style.display='none';vm.textContent=w.status==='picking'?w.voiceMsg:'—';}
+  document.getElementById('dv-ol').innerHTML=w.orderList.map((item,i)=>{
+    const isCur=i===w.progress.done;
+    return`<div class="oi ${item.done?'done':''} ${isCur?'cur':''}">
+<div class="oseq">${item.done?'✓':i+1}</div>
+<div class="oii"><div class="oir">${item.ref}</div><div class="oid">${item.name}</div></div>
+<span style="font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--tx2)">×${item.qty}</span>
+<span style="font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--cy);background:var(--sf3);border-radius:2px;padding:1px 3px">${item.loc}</span>
+<span>${item.done?'✅':isCur?'▶':'⬜'}</span>
+</div>`;
+  }).join('');
+}
+
+function doContact(){const w=G.workers.find(x=>x.id===G.selWorkerId);if(w)addTicker('info','📞',`Appel vers ${w.name}`);}
+function doReassign(){const w=G.workers.find(x=>x.id===G.selWorkerId);if(!w)return;const nz=['A','B','C','D','E'].find(z=>z!==w.zone)||'A';w.zone=nz;w.allée=ALLEES.filter(a=>a[0]===nz)[rnd(0,11)];addTicker('info','🔀',`${w.name} → Zone ${nz}`);updDetail(w);}
+function doWarn(){const w=G.workers.find(x=>x.id===G.selWorkerId);if(w)hwarn(w.id);}
+function doFire(){const w=G.workers.find(x=>x.id===G.selWorkerId);if(w)hfire(w.id);}
+
+let activeTab='workers';
+function setTab(t){
+  activeTab=t;
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+  document.getElementById('t-'+t).classList.add('active');
+  document.querySelectorAll('.tab-content,[id^="tc-"]').forEach(e=>{e.classList.remove('active');e.style.display='none';});
+  const el=document.getElementById('tc-'+t);
+  if(el){el.classList.add('active');el.style.display=t==='workers'||t==='stock'?'grid':'block';}
+  if(t==='workers')renderTable();
+  if(t==='ranking')renderRanking();
+  if(t==='stats')renderStats();
+  if(t==='stock')renderStock();
+  if(t==='hr')renderHR();
+  if(t==='finance')renderFinance();
+  if(t==='docks')renderDocks();
+  if(t==='market')renderMarket();
+  if(t==='notifs')renderNotifs();
+  if(t==='map')renderMap();
+}
+
+function renderMap(){
+  const el=document.getElementById('map-content-main');
+  if(!el)return;
+  const zones=['A','B','C','D','E'];
+  let html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:16px;">';
+  zones.forEach(zone=>{
+    const zAl=ALLEES.filter(a=>a[0]===zone);
+    const zWorkers=G.workers.filter(w=>!w.fired&&w.zone===zone);
+    html+=`<div style="background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:12px;">
+<div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+  Zone ${zone}
+  <span style="font-size:10px;color:var(--tx3);font-weight:400">${zWorkers.filter(w=>w.status==='picking').length} actifs / ${zWorkers.length} total</span>
+  <span style="font-size:10px;color:${zWorkers.filter(w=>w.status==='alert').length>0?'var(--rd)':'var(--gn)'}">
+    ${zWorkers.filter(w=>w.status==='alert').length>0?'⚠ '+zWorkers.filter(w=>w.status==='alert').length+' alertes':'✅ OK'}
+  </span>
+</div>`;
+    html+=`<div style="display:grid;grid-template-columns:36px repeat(${ETAGERES.length},1fr);gap:2px;margin-bottom:2px;">`;
+    html+=`<div style="font-size:8px;color:var(--tx3)"></div>`;
+    ETAGERES.forEach(et=>{html+=`<div style="font-size:8px;color:var(--tx3);text-align:center">${et}</div>`;});
+    html+=`</div>`;
+    zAl.forEach(al=>{
+      html+=`<div style="display:grid;grid-template-columns:36px repeat(${ETAGERES.length},1fr);gap:2px;margin-bottom:2px;">`;
+      html+=`<div style="font-size:8px;color:var(--tx3);display:flex;align-items:center;font-family:'JetBrains Mono',monospace">${al}</div>`;
+      ETAGERES.forEach(et=>{
+        const here=G.workers.filter(w=>!w.fired&&w.allée===al&&w.étagère===et&&w.status==='picking');
+        const hasAlert=here.some(w=>w.status==='alert');
+        const allHigh=here.length>0&&here.every(w=>w.rate>=90);
+        const allLow=here.length>0&&here.some(w=>w.rate<55);
+        let bg='var(--sf3)',border='var(--bd)',color='transparent';
+        if(here.length>0){
+          if(hasAlert){bg='var(--rdd)';border='var(--rd)';color='var(--rd)';}
+          else if(allHigh){bg='rgba(63,185,80,.15)';border='var(--gn)';color='var(--gn)';}
+          else if(allLow){bg='var(--yed)';border='var(--ye)';color='var(--ye)';}
+          else{bg='var(--bld)';border='var(--bl)';color='var(--cy)';}
+        }
+        const title=here.length>0?here.map(w=>`${w.name} (${w.rate.toFixed(0)} c/h)`).join(', '):`${al}-${et}: vide`;
+        html+=`<div style="height:18px;background:${bg};border:1px solid ${border};border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:9px;font-family:'JetBrains Mono',monospace;color:${color};transition:all .2s"
+          title="${title}"
+          onclick="focusMapCell('${al}','${et}')">${here.length>0?here.length:''}</div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+function focusMapCell(zone,allee){
+  setTab('workers');
+  document.getElementById('wsearch').value=al;
+  wSearch(al);
+}
+
+function updateKPIs(alertCnt){
+  const active=G.workers.filter(w=>!w.fired&&w.status==='picking').length;
+  const alerts=alertCnt||G.workers.filter(w=>w.status==='alert').length;
+  const avgR=active>0?G.workers.filter(w=>w.status==='picking').reduce((s,w)=>s+w.rate,0)/active:0;
+  const hourCost=G.workers.filter(w=>!w.fired).reduce((s,w)=>s+w.salary,0);
+  document.getElementById('k-budget').textContent=fmtK(G.budget);
+  document.getElementById('k-budget').style.color=G.budget>G.startBudget*0.5?'var(--gn)':G.budget>G.startBudget*0.2?'var(--ye)':'var(--rd)';
+  document.getElementById('k-revenue').textContent=fmtK(G.todayRevenue);
+  document.getElementById('k-costs').textContent=fmt(hourCost)+'/h';
+  document.getElementById('k-active').textContent=active;
+  document.getElementById('k-pal').textContent=G.todayPalettes;
+  document.getElementById('k-alerts').textContent=alerts;
+}
+
+const tickItems=[];
+function addTicker(type,ico,txt){
+  tickItems.push({type,ico,txt});
+  if(tickItems.length>30)tickItems.shift();
+  const inner=document.getElementById('ticker-inner');
+  const doubled=[...tickItems,...tickItems];
+  inner.innerHTML=doubled.map(t=>`<span class="tick-item ${t.type}"><span class="ti-ico">${t.ico}</span><span class="ti-txt">${t.txt}</span></span>`).join('');
+}
+
+
+function exportSave(){
+  const save = {
+    version: '4.0',
+    timestamp: new Date().toISOString(),
+    game: {
+      ...G,
+      workers: G.workers.map(w=>({
+        ...w,
+        lastUpdate: w.lastUpdate?.toISOString(),
+        hireDate: w.hireDate?.toISOString()
+      })),
+      notifications: G.notifications.map(n=>({...n, time: n.time?.toISOString()})),
+      waitingPalettes: G.waitingPalettes.map(p=>({...p, completedAt: p.completedAt?.toISOString()}))
+    }
+  };
+  
+  const json = JSON.stringify(save, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `wms_save_${G.whName.replace(/\s/g,'_')}_J${G.day}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  addTicker('good','📥',`Sauvegarde exportée: J${G.day}`);
+}
+
+function importSave(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const save = JSON.parse(e.target.result);
+      if(!save.game){
+        alert('Fichier invalide');
+        return;
+      }
+      
+      // Restore game state
+      Object.assign(G, save.game);
+      
+      // Restore dates
+      G.workers.forEach(w=>{
+        w.lastUpdate = w.lastUpdate ? new Date(w.lastUpdate) : new Date();
+        w.hireDate = w.hireDate ? new Date(w.hireDate) : new Date();
+      });
+      G.notifications.forEach(n=>{
+        n.time = n.time ? new Date(n.time) : new Date();
+      });
+      G.waitingPalettes.forEach(p=>{
+        p.completedAt = p.completedAt ? new Date(p.completedAt) : new Date();
+      });
+      
+      // Refresh UI
+      document.getElementById('setup-screen').style.display='none';
+      document.getElementById('main-app').classList.add('show');
+      document.getElementById('wh-title').textContent=G.whName;
+      document.getElementById('wh-sub').textContent='Directeur: '+G.mgrName;
+      
+      G.initialized = true;
+      if(!realTimerInterval) startSimulation();
+      
+      renderTable();
+      renderDocks();
+      updateKPIs(0);
+      
+      addTicker('good','📤',`Sauvegarde J${G.day} importée`);
+      alert(`Sauvegarde chargée: ${G.whName} - Jour ${G.day}`);
+    } catch(err) {
+      alert('Erreur de chargement: ' + err.message);
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+  
+  // Reset input
+  event.target.value = '';
+}
+
+function saveGame(){
+  try{
+    const saveData={
+      mgrName:G.mgrName,whName:G.whName,budget:G.budget,startBudget:G.startBudget,
+      day:G.day,hour:G.hour,minute:G.minute,difficulty:G.difficulty,
+      totalRevenue:G.totalRevenue,totalCosts:G.totalCosts,
+      todayRevenue:G.todayRevenue,todayPalettes:G.todayPalettes,totalPalettes:G.totalPalettes,
+      revenuePerPalette:G.revenuePerPalette,finances:{...G.finances},
+      workers:G.workers.map(w=>({...w,lastUpdate:w.lastUpdate?w.lastUpdate.toISOString():null,hireDate:w.hireDate?w.hireDate.toISOString():null,voiceActive:false})),
+      stocks:G.stocks,docks:G.docks,marketPrices:G.marketPrices,
+      waitingPalettes:G.waitingPalettes.map(p=>({...p,completedAt:p.completedAt?p.completedAt.toISOString():null})),
+      notifications:G.notifications.slice(0,50).map(n=>({...n,time:n.time?n.time.toISOString():null})),
+    };
+    const json=JSON.stringify(saveData);
+    localStorage.setItem('wms_save',json);
+    const btn=document.querySelector('.btn.success');
+    if(btn){btn.textContent='✅ Sauvé!';setTimeout(()=>{btn.textContent='💾 Sauver';},2000);}
+    addTicker('good','💾',`Sauvegardé — J${G.day} ${String(G.hour).padStart(2,'0')}:${String(G.minute).padStart(2,'0')} (${Math.round(json.length/1024)}Ko)`);
+  }catch(e){
+    addTicker('warn','❌',`Erreur sauvegarde: ${e.message}`);
+    console.log('Save error:',e);
+  }
+}
+function loadGame(){
+  const raw=localStorage.getItem('wms_save');
+  if(!raw)return false;
+  try{
+    const {G:saved}=JSON.parse(raw);
+    Object.assign(G,saved);
+    if(G.workers)G.workers.forEach(w=>{w.lastUpdate=w.lastUpdate?new Date(w.lastUpdate):new Date();w.hireDate=w.hireDate?new Date(w.hireDate):new Date();if(!w.orderList)w.orderList=[];});
+    if(G.notifications)G.notifications.forEach(n=>{n.time=n.time?new Date(n.time):new Date();});
+    if(G.waitingPalettes)G.waitingPalettes.forEach(p=>{p.completedAt=p.completedAt?new Date(p.completedAt):new Date();});
+    if(!G.docks||G.docks.length===0)initDocks();
+    if(!G.stocks||G.stocks.length===0)initStocks();
+    if(!G.marketPrices||Object.keys(G.marketPrices).length===0)initMarket();
+    return true;
+  }catch(e){console.log(e);return false;}
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('wms_save')){
+    const resume=confirm('Sauvegarde détectée. Reprendre la partie?');
+    if(resume&&loadGame()){
+      document.getElementById('setup-screen').style.display='none';
+      document.getElementById('main-app').classList.add('show');
+      document.getElementById('wh-title').textContent=G.whName;
+      document.getElementById('wh-sub').textContent='Directeur: '+G.mgrName;
+      document.getElementById('rev-per-pal').textContent=G.revenuePerPalette+'€';
+      G.initialized=true;
+      startSimulation();
+      renderTable();renderDocks();renderDockWaiting();
+      addTicker('good','💾',`Partie J${G.day} reprise — Budget: ${fmtK(G.budget)}`);
+    }
+  }
+});
+
+setInterval(()=>{if(G.initialized)saveGame();},120000);
+
+
+
+
+
+function renderWarehouse(){
+  const grid = document.getElementById('warehouse-grid');
+  if(!grid) return;
+  
+  const zones = ['A','B','C','D','E'];
+  
+  let html = '';
+  
+  zones.forEach(zone => {
+    const workersInZone = G.workers.filter(w=>
+      !w.fired && w.zone===zone && w.status==='picking'
+    );
+    
+    const avgRate = workersInZone.length > 0 
+      ? workersInZone.reduce((s,w)=>s+w.rate,0)/workersInZone.length 
+      : 0;
+    
+    const color = avgRate>=120?'var(--gn)':avgRate>=90?'var(--bl)':avgRate>=60?'var(--ye)':avgRate>0?'var(--rd)':'var(--sf3)';
+    
+    html += `
+    <div style="background:var(--sf);border:2px solid ${workersInZone.length>0?color:'var(--bd)'};border-radius:var(--r);padding:20px;position:relative;">
+      <div style="position:absolute;top:10px;right:10px;font-size:32px;opacity:0.15;">📦</div>
+      
+      <div style="font-size:24px;font-weight:700;color:${color};margin-bottom:10px;">
+        ZONE ${zone}
+      </div>
+      
+      <div style="display:grid;gap:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;">
+          <span style="color:var(--tx2);">Préparateurs:</span>
+          <span style="font-weight:700;color:var(--tx);">${workersInZone.length}</span>
+        </div>
+        
+        <div style="display:flex;justify-content:space-between;font-size:12px;">
+          <span style="color:var(--tx2);">Prod. moyenne:</span>
+          <span style="font-weight:700;color:${color};">${avgRate>0?avgRate.toFixed(0):'—'} col/h</span>
+        </div>
+        
+        <div style="height:60px;background:var(--sf2);border-radius:4px;padding:8px;overflow:hidden;">
+          ${workersInZone.slice(0,5).map(w=>`
+            <div style="font-size:10px;color:var(--tx3);margin-bottom:2px;">
+              ${w.name.substring(0,15)} - ${w.rate.toFixed(0)} col/h
+            </div>
+          `).join('')}
+          ${workersInZone.length>5?`<div style="font-size:9px;color:var(--tx3);margin-top:4px;">+${workersInZone.length-5} autres...</div>`:''}
+        </div>
+        
+        <div style="margin-top:8px;font-size:11px;color:var(--tx2);">
+          Allées: ${zone}01 à ${zone}12
+        </div>
+      </div>
+    </div>
+    `;
+  });
+  
+  grid.innerHTML = html;
+  
+  const activeCount = G.workers.filter(w=>!w.fired&&w.status==='picking').length;
+  const countEl = document.getElementById('wh-active-count');
+  if(countEl) countEl.textContent = activeCount;
+}
+
+</script>
+</body>
+</html>
