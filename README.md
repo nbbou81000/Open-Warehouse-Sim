@@ -3,8 +3,6 @@
 
 A lightweight (142 kb) logistics management game built with Vanilla JS/HTML5.
 
-## 🚀 [CLICK HERE TO LAUCH THE GAME](https://github.com/nbbou81000/Open-Warehouse-Sim/blob/main/warehouse%20manager1.html)
-
 ##  About this Project
 This project is a personal challenge only to satisfy my curiosity in vibe-coding with AI agents. **I am a beginner and I don't know how to code.** The entire game was built through an iterative process using **Claude (Anthropic AI)**. 
 
