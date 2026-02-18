@@ -19,7 +19,7 @@ I am looking for benevolent contributors to help refine this prototype! However,
 4. **gameplay** Please keep the initial global gameplay, but feel free to add improvements, elements to make this more "playable".   
 ##  How to Play
 1. Clone the repo or download the HTML file.
-2. Open `warehouse manager 111.html` in any modern web browser.
+2. Open `warehouse manager1.html` in any modern web browser.
 3. Start managing your logistics empire!
 
 ## 📜 License
